@@ -1,0 +1,414 @@
+openapi: 3.0.4
+info:
+  title: "Browser Notifications ${VERSION_APP}"
+  description: Browser notifications for web-app users in real time
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:8888/v1
+tags:
+  - name: brown
+    description: Модуль всплывающих уведомлений для браузера
+paths:
+  /brown/create:
+    post:
+      tags:
+        - CRUD
+      summary: Create notification
+      operationId: notificationCreate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationCreateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationCreateResponse'
+  /brown/read:
+    post:
+      tags:
+        - CRUD
+      summary: Read notification
+      operationId: notificationRead
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationReadRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationReadResponse'
+  /brown/update:
+    post:
+      tags:
+        - CRUD
+      summary: Update notification
+      operationId: notificationUpdate
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationUpdateRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationUpdateResponse'
+  /brown/cancel:
+    post:
+      tags:
+        - CRUD
+      summary: Cancel notification
+      operationId: notificationCancel
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationCancelRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationCancelResponse'
+  /brown/search:
+    post:
+      tags:
+        - Search
+      summary: Search notification
+      operationId: notificationSearch
+      requestBody:
+        description: Request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationSearchRequest'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationSearchResponse'
+
+components:
+  schemas:
+
+    IRequest:
+      type: object
+      description: Базовый интерфейс для всех запросов
+      properties:
+        requestType:
+          type: string
+          description: Поле-дискриминатор - задаёт тип запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+      discriminator:
+        propertyName: requestType
+        mapping:
+          create: '#/components/schemas/NotificationCreateRequest'
+          read:   '#/components/schemas/NotificationReadRequest'
+          update: '#/components/schemas/NotificationUpdateRequest'
+          cancel: '#/components/schemas/NotificationCancelRequest'
+          search: '#/components/schemas/NotificationSearchRequest'
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        group:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+
+    ResponseResult:
+      type: string
+      enum:
+        - success
+        - error
+
+    IResponse:
+      type: object
+      description: Базовый интерфейс для всех ответов
+      properties:
+        responseType:
+          type: string
+          description: Поле-дискриминатор - задаёт тип запроса
+          example: create
+        requestId:
+          type: string
+          description: Идентификатор запроса для отладки
+        result:
+          $ref: '#/components/schemas/ResponseResult'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+
+      discriminator:
+        propertyName: responseType
+        mapping:
+          create: '#/components/schemas/NotificationCreateResponse'
+          read:   '#/components/schemas/NotificationReadResponse'
+          update: '#/components/schemas/NotificationUpdateResponse'
+          cancel: '#/components/schemas/NotificationCancelResponse'
+          search: '#/components/schemas/NotificationSearchResponse'
+          init: '#/components/schemas/NotificationInitResponse'
+
+    UserId:
+      type: string
+      description: Идентификатор пользователя
+    NotificationId:
+      type: string
+      description: Идентификатор уведомления
+    NotificationLock:
+      type: string
+      description: Версия оптимистичной блокировки
+
+    BaseNotification:
+      type: object
+      description: Объект описывает свойства, одинаковые для create и update
+      properties:
+        title:
+          type: string
+          description: Заголовок уведомления
+        description:
+          type: string
+          description: Описание уведомления
+        notificationType:
+          $ref: '#/components/schemas/NotificationType'
+        visibility:
+          $ref: '#/components/schemas/NotificationVisibility'
+
+    NotificationType:
+      type: string
+      description: 'Тип уведомления: обычное; предупреждение; алерт'
+      enum:
+        - common
+        - warning
+        - alert
+
+    NotificationVisibility:
+      type: string
+      description: 'Тип видимости уведомления: опубликовано'
+      enum:
+        - public
+
+    NotificationInitResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+
+    NotificationCreateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseNotification'
+
+    NotificationCreateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NotificationRequestDebug'
+        - type: object
+          properties:
+            notification:
+              $ref: '#/components/schemas/NotificationCreateObject'
+
+    NotificationReadObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/NotificationId'
+
+    NotificationReadRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NotificationRequestDebug'
+        - type: object
+          properties:
+            notification:
+              $ref: '#/components/schemas/NotificationReadObject'
+
+    NotificationUpdateObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseNotification'
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/NotificationId'
+            lock:
+              $ref: '#/components/schemas/NotificationLock'
+
+    NotificationUpdateRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NotificationRequestDebug'
+        - type: object
+          properties:
+            notification:
+              $ref: '#/components/schemas/NotificationUpdateObject'
+
+    NotificationCancelObject:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/NotificationId'
+            lock:
+              $ref: '#/components/schemas/NotificationLock'
+
+    NotificationCancelRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NotificationRequestDebug'
+        - type: object
+          properties:
+            notification:
+              $ref: '#/components/schemas/NotificationCancelObject'
+
+    NotificationSearchFilter:
+      type: object
+      description: Набор фильтров для поиска
+      properties:
+        searchString:
+          type: string
+          description: Поисковая строка, которая будет искаться в уведомлениях
+
+    NotificationSearchRequest:
+      allOf:
+        - $ref: '#/components/schemas/IRequest'
+        - $ref: '#/components/schemas/NotificationRequestDebug'
+        - type: object
+          properties:
+            notificationFilter:
+              $ref: '#/components/schemas/NotificationSearchFilter'
+
+    NotificationResponseObject:
+      allOf:
+        - $ref: '#/components/schemas/BaseNotification'
+        - type: object
+          description: Объект, который возвращается в ответе бэкенда
+          properties:
+            id:
+              $ref: '#/components/schemas/NotificationId'
+            ownerId:
+              $ref: '#/components/schemas/UserId'
+            lock:
+              $ref: '#/components/schemas/NotificationLock'
+            permissions:
+              type: array
+              uniqueItems: true
+              items:
+                $ref: '#/components/schemas/NotificationPermissions'
+
+    NotificationPermissions:
+      type: string
+      description: Доступы для клиента для операций над уведомлением
+      enum:
+        - read
+        - update
+        - cancel
+        - makeVisiblePublic
+
+    NotificationResponseSingle:
+      allOf:
+        - type: object
+          description: Ответ с одним объектом уведомления
+          properties:
+            notification:
+              $ref: '#/components/schemas/NotificationResponseObject'
+
+    NotificationResponseMulti:
+      allOf:
+        - type: object
+          description: Список найденных объектов
+          properties:
+            notifications:
+              type: array
+              items:
+                $ref: '#/components/schemas/NotificationResponseObject'
+
+    NotificationCreateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NotificationResponseSingle'
+
+    NotificationReadResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NotificationResponseSingle'
+
+    NotificationUpdateResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NotificationResponseSingle'
+
+    NotificationCancelResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NotificationResponseSingle'
+
+    NotificationSearchResponse:
+      allOf:
+        - $ref: '#/components/schemas/IResponse'
+        - $ref: '#/components/schemas/NotificationResponseMulti'
+
+    # STUBS ======================
+    NotificationRequestDebugMode:
+      type: string
+      enum:
+        - prod
+        - test
+        - stub
+
+    NotificationRequestDebug:
+      type: object
+      properties:
+        debug:
+          $ref: '#/components/schemas/NotificationDebug'
+
+    NotificationDebug:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/NotificationRequestDebugMode'
+        stub:
+          $ref: '#/components/schemas/NotificationRequestDebugStubs'
+
+    NotificationRequestDebugStubs:
+      type: string
+      description: Перечисления всех стабов
+      enum:
+        - success
+        - notFound
+        - badId
+        - badTitle
+        - badDescription
+        - badVisibility
+        - cannotCancel
+        - badSearchString
