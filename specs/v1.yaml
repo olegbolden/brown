@@ -7,15 +7,15 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
 servers:
-  - url: http://localhost:8888/v1
+  - url: http://localhost:8888/api/v1
 tags:
-  - name: brown
-    description: Модуль всплывающих уведомлений для браузера
+  - name: notification
+    description: Операции с уведомлениями
 paths:
-  /brown/create:
+  /notification/create:
     post:
       tags:
-        - CRUD
+        - notification
       summary: Create notification
       operationId: notificationCreate
       requestBody:
@@ -32,10 +32,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotificationCreateResponse'
-  /brown/read:
+  /notification/read:
     post:
       tags:
-        - CRUD
+        - notification
       summary: Read notification
       operationId: notificationRead
       requestBody:
@@ -52,10 +52,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotificationReadResponse'
-  /brown/update:
+  /notification/update:
     post:
       tags:
-        - CRUD
+        - notification
       summary: Update notification
       operationId: notificationUpdate
       requestBody:
@@ -72,10 +72,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotificationUpdateResponse'
-  /brown/cancel:
+  /notification/cancel:
     post:
       tags:
-        - CRUD
+        - notification
       summary: Cancel notification
       operationId: notificationCancel
       requestBody:
@@ -92,10 +92,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotificationCancelResponse'
-  /brown/search:
+  /notification/search:
     post:
       tags:
-        - Search
+        - notification
       summary: Search notification
       operationId: notificationSearch
       requestBody:
