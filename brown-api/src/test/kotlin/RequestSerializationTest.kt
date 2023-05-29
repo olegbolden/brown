@@ -8,6 +8,7 @@ import ru.otus.kotlin.brown.api.v1.mappers.apiV1RequestSerialize
 
 class RequestSerializationTest {
     private val request = NotificationCreateRequest(
+        requestType = "create",
         requestId = "22fc6e6f-2f46-46c2-b701-d159bda43acc",
         debug = NotificationDebug(
             mode = NotificationRequestDebugMode.STUB,

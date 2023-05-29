@@ -5,7 +5,7 @@ data class Notification(
     var title: String = "",
     var description: String = "",
     var ownerId: NotificationUserId = NotificationUserId.NONE,
-    val notificationType: NotificationType = NotificationType.NONE,
-    var visibility: NotificationVisibility = NotificationVisibility.NONE,
+    val notificationType: NotificationType = NotificationType.COMMON,
+    var visibility: NotificationVisibility = NotificationVisibility.PRIVATE,
     val permissionsClient: MutableSet<NotificationPermissionClient> = mutableSetOf()
 )

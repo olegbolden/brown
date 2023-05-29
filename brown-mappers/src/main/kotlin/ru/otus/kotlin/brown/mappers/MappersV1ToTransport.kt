@@ -3,53 +3,32 @@ package ru.otus.kotlin.brown.mappers
 import ru.otus.kotlin.brown.api.v1.models.*
 import ru.otus.kotlin.brown.common.models.*
 import ru.otus.kotlin.brown.common.NotificationContext
-import ru.otus.kotlin.brown.common.models.NotificationVisibility as Visibility
+import ru.otus.kotlin.brown.mappers.exceptions.UnknownRequest
 import ru.otus.kotlin.brown.common.models.NotificationType as Type
-import ru.otus.kotlin.brown.mappers.exceptions.UnknownNotificationCommand
+import ru.otus.kotlin.brown.common.models.NotificationVisibility as Visibility
 
-fun NotificationContext.toTransportNotification(): IResponse = when (val cmd = command) {
-    NotificationCommand.CREATE -> toTransportCreate()
-    NotificationCommand.READ -> toTransportRead()
-    NotificationCommand.UPDATE -> toTransportUpdate()
-    NotificationCommand.CANCEL-> toTransportCancel()
-    NotificationCommand.SEARCH -> toTransportSearch()
-    NotificationCommand.NONE -> throw UnknownNotificationCommand(cmd)
+fun NotificationContext.toTransport(): Any {
+    val isMultipleOutput = command === NotificationCommand.SEARCH
+    return requestFabric(command, NotificationGeneralResponse(
+        requestId = this.requestId.asString().takeIf { it.isNotBlank() },
+        result = if (this.state == NotificationState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR,
+        errors = this.errors.toTransportErrors(),
+        notification = this.notificationResponse.toTransportNotification().takeIf { !isMultipleOutput },
+        notifications = this.notificationFilterResponse.toTransportNotification().takeIf { isMultipleOutput }
+    ))
 }
 
-fun NotificationContext.toTransportCreate() = NotificationCreateResponse(
-    requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == NotificationState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
-    errors = errors.toTransportErrors(),
-    notification = notificationResponse.toTransportNotification()
-)
-
-fun NotificationContext.toTransportRead() = NotificationReadResponse(
-    requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == NotificationState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
-    errors = errors.toTransportErrors(),
-    notification = notificationResponse.toTransportNotification()
-)
-
-fun NotificationContext.toTransportUpdate() = NotificationUpdateResponse(
-    requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == NotificationState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
-    errors = errors.toTransportErrors(),
-    notification = notificationResponse.toTransportNotification()
-)
-
-fun NotificationContext.toTransportCancel() = NotificationCancelResponse(
-    requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == NotificationState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
-    errors = errors.toTransportErrors(),
-    notification = notificationResponse.toTransportNotification()
-)
-
-fun NotificationContext.toTransportSearch() = NotificationSearchResponse(
-    requestId = this.requestId.asString().takeIf { it.isNotBlank() },
-    result = if (state == NotificationState.RUNNING) ResponseResult.SUCCESS else ResponseResult.ERROR,
-    errors = errors.toTransportErrors(),
-    notifications = notificationsResponse.toTransportNotification()
-)
+private fun requestFabric(command: NotificationCommand, data: NotificationGeneralResponse): Any {
+    val (responseType, requestId, result,  errors, notification, notifications) = data
+    return when (command) {
+        NotificationCommand.CREATE -> NotificationCreateResponse(responseType, requestId, result,  errors, notification)
+        NotificationCommand.READ -> NotificationReadResponse(responseType, requestId, result,  errors, notification)
+        NotificationCommand.UPDATE -> NotificationUpdateResponse(responseType, requestId, result,  errors, notification)
+        NotificationCommand.CANCEL -> NotificationCancelResponse(responseType, requestId, result,  errors, notification)
+        NotificationCommand.SEARCH -> NotificationSearchResponse(responseType, requestId, result,  errors, notifications)
+        else -> throw UnknownRequest()
+    }
+}
 
 fun List<Notification>.toTransportNotification(): List<NotificationResponseObject>? = this
     .map { it.toTransportNotification() }
@@ -62,7 +41,7 @@ fun NotificationContext.toTransportInit() = NotificationInitResponse(
     errors = errors.toTransportErrors(),
 )
 
-private fun Notification.toTransportNotification(): NotificationResponseObject = NotificationResponseObject(
+public fun Notification.toTransportNotification(): NotificationResponseObject = NotificationResponseObject(
     id = id.takeIf { it != NotificationId.NONE }?.asString(),
     title = title.takeIf { it.isNotBlank() },
     description = description.takeIf { it.isNotBlank() },
@@ -84,19 +63,18 @@ private fun NotificationPermissionClient.toTransportNotification() = when (this)
     NotificationPermissionClient.CANCEL -> NotificationPermissions.CANCEL
 }
 
-private fun Visibility.toTransportNotification(): NotificationVisibility? = when (this) {
-    Visibility.VISIBLE_PUBLIC -> NotificationVisibility.PUBLIC
-    Visibility.NONE -> null
+private fun Visibility.toTransportNotification(): NotificationVisibility = when (this) {
+    Visibility.PUBLIC -> NotificationVisibility.PUBLIC
+    Visibility.PRIVATE -> NotificationVisibility.PRIVATE
 }
 
-private fun Type.toTransportNotification(): NotificationType? = when (this) {
+private fun Type.toTransportNotification(): NotificationType = when (this) {
     Type.COMMON -> NotificationType.COMMON
     Type.WARNING -> NotificationType.WARNING
     Type.ALERT -> NotificationType.ALERT
-    Type.NONE -> null
 }
 
-private fun List<NotificationError>.toTransportErrors(): List<Error>? = this
+public fun List<NotificationError>.toTransportErrors(): List<Error>? = this
     .map { it.toTransportNotification() }
     .toList()
     .takeIf { it.isNotEmpty() }
