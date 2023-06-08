@@ -4,4 +4,5 @@ enum class NotificationState {
     NONE,
     RUNNING,
     FAILING,
+    FINISHING
 }

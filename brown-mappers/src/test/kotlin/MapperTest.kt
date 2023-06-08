@@ -3,16 +3,17 @@ import kotlin.test.assertEquals
 import ru.otus.kotlin.brown.api.v1.models.*
 import ru.otus.kotlin.brown.common.models.*
 import ru.otus.kotlin.brown.common.NotificationContext
-import ru.otus.kotlin.brown.common.stubs.NotificationStubs
+import ru.otus.kotlin.brown.common.stubs.NotificationStubType
 import ru.otus.kotlin.brown.common.models.NotificationType as Type
 import ru.otus.kotlin.brown.common.models.NotificationVisibility as Visibility
 import ru.otus.kotlin.brown.mappers.fromTransport
-import ru.otus.kotlin.brown.mappers.toTransportNotification
+import ru.otus.kotlin.brown.mappers.toTransport
 
 class MapperTest {
     @Test
     fun fromTransport() {
         val req = NotificationCreateRequest(
+            requestType="create",
             requestId = "1234",
             debug = NotificationDebug(
                 mode = NotificationRequestDebugMode.STUB,
@@ -29,10 +30,10 @@ class MapperTest {
         val context = NotificationContext()
         context.fromTransport(req)
 
-        assertEquals(NotificationStubs.SUCCESS, context.stubCase)
+        assertEquals(NotificationStubType.SUCCESS, context.stubCase)
         assertEquals(NotificationWorkMode.STUB, context.workMode)
         assertEquals("title", context.notificationRequest.title)
-        assertEquals(Visibility.VISIBLE_PUBLIC, context.notificationRequest.visibility)
+        assertEquals(Visibility.PUBLIC, context.notificationRequest.visibility)
         assertEquals(Type.ALERT, context.notificationRequest.notificationType)
     }
 
@@ -45,7 +46,7 @@ class MapperTest {
                 title = "title",
                 description = "desc",
                 notificationType = Type.ALERT,
-                visibility = Visibility.VISIBLE_PUBLIC,
+                visibility = Visibility.PUBLIC,
             ),
             errors = mutableListOf(
                 NotificationError(
@@ -58,7 +59,7 @@ class MapperTest {
             state = NotificationState.RUNNING,
         )
 
-        val req = context.toTransportNotification() as NotificationCreateResponse
+        val req = context.toTransport() as NotificationCreateResponse
 
         assertEquals("1234", req.requestId)
         assertEquals("title", req.notification?.title)

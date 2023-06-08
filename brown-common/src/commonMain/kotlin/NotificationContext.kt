@@ -2,8 +2,8 @@ package ru.otus.kotlin.brown.common
 
 import kotlinx.datetime.Instant
 import ru.otus.kotlin.brown.common.models.*
-import ru.otus.kotlin.brown.common.models.*
-import ru.otus.kotlin.brown.common.stubs.NotificationStubs
+import ru.otus.kotlin.brown.common.stubs.NotificationStubType
+import ru.otus.kotlin.brown.common.models.NotificationFilter
 
 data class NotificationContext(
     var command: NotificationCommand = NotificationCommand.NONE,
@@ -11,12 +11,16 @@ data class NotificationContext(
     val errors: MutableList<NotificationError> = mutableListOf(),
 
     var workMode: NotificationWorkMode = NotificationWorkMode.PROD,
-    var stubCase: NotificationStubs = NotificationStubs.NONE,
+    var stubCase: NotificationStubType = NotificationStubType.NONE,
 
     var requestId: NotificationRequestId = NotificationRequestId.NONE,
     var timeStart: Instant = Instant.NONE,
+
+    // Operations with notifications
     var notificationRequest: Notification = Notification(),
-    var notificationFilterRequest: NotificationFilter = NotificationFilter(),
     var notificationResponse: Notification = Notification(),
-    var notificationsResponse: MutableList<Notification> = mutableListOf(),
+
+    // Search for notifications
+    var notificationFilterRequest: NotificationFilter = NotificationFilter(),
+    var notificationFilterResponse: MutableList<Notification> = mutableListOf(),
 )

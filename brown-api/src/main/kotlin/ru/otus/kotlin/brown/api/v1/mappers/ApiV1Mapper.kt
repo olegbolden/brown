@@ -1,5 +1,6 @@
 package ru.otus.kotlin.brown.api.v1.mappers
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import ru.otus.kotlin.brown.api.v1.models.IRequest
 import ru.otus.kotlin.brown.api.v1.models.IResponse
 import com.fasterxml.jackson.databind.MapperFeature
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 
 val apiV1Mapper = JsonMapper.builder().run {
     configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    serializationInclusion(JsonInclude.Include.NON_NULL)
     enable(MapperFeature.USE_BASE_TYPE_AS_DEFAULT_IMPL)
     build()
 }

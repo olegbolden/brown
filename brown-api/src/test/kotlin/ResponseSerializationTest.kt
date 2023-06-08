@@ -8,6 +8,7 @@ import ru.otus.kotlin.brown.api.v1.mappers.apiV1ResponseSerialize
 
 class ResponseSerializationTest {
     private val response = NotificationCreateResponse(
+        responseType = "create",
         requestId = "22fc6e6f-2f46-46c2-b701-d159bda43acc",
         notification = NotificationResponseObject(
             title = "Important notification",

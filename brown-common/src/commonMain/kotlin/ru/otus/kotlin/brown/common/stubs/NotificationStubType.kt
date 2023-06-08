@@ -1,6 +1,6 @@
 package ru.otus.kotlin.brown.common.stubs
 
-enum class NotificationStubs {
+enum class NotificationStubType {
     NONE,
     SUCCESS,
     NOT_FOUND,
