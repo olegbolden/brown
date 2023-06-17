@@ -12,7 +12,7 @@ import ru.otus.kotlin.brown.mappers.exceptions.UnknownNotificationCommand
 import ru.otus.kotlin.brown.mappers.exceptions.ValueOutOfRange
 
 fun NotificationContext.fromTransport(request: IRequest) {
-    command = request.requestType?.getNotificationCommand()!!
+    command = request.requestType.getNotificationCommand()
     requestId = request.requestId?.let { NotificationRequestId(it) } ?: NotificationRequestId.NONE
     workMode = when (request.debug?.mode) {
         NotificationRequestDebugMode.PROD -> NotificationWorkMode.PROD
@@ -44,13 +44,13 @@ fun NotificationContext.fromTransport(request: IRequest) {
     }
 }
 
-fun String.getNotificationCommand() = when (this) {
+fun String?.getNotificationCommand() = when (this) {
     "create" -> NotificationCommand.CREATE
     "read" -> NotificationCommand.READ
     "update" -> NotificationCommand.UPDATE
     "cancel" -> NotificationCommand.CANCEL
     "search" -> NotificationCommand.SEARCH
-    "none" -> NotificationCommand.NONE
+    null -> NotificationCommand.NONE
     else -> throw UnknownNotificationCommand()
 }
 

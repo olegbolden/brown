@@ -4,7 +4,6 @@ plugins {
 
 kotlin {
     jvm {}
-    linuxX64 {}
 
     sourceSets {
         val datetimeVersion: String by project

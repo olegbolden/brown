@@ -1,8 +1,8 @@
-# Модуль всплывающих браузерных уведомлений
+# Module for browser notification popups
 
-Предназначен для уведомления пользователей в окне браузера о важных событиях в режиме реального времени
+Module aids to notify users with popups in browser window about various events in real time
 
-### Технологии
+### Technologies
 1. WebSocket
 2. Ktor
-3. БД пока не выбрана
+3. DB is to be selected

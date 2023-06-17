@@ -2,9 +2,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertContains
 import ru.otus.kotlin.brown.api.v1.models.*
-import ru.otus.kotlin.brown.api.v1.mappers.apiV1Mapper
-import ru.otus.kotlin.brown.api.v1.mappers.apiV1RequestDeserialize
-import ru.otus.kotlin.brown.api.v1.mappers.apiV1RequestSerialize
+import ru.otus.kotlin.brown.api.v1.mappers.*
 
 class RequestSerializationTest {
     private val request = NotificationCreateRequest(
@@ -24,7 +22,7 @@ class RequestSerializationTest {
 
     @Test
     fun serialize() {
-        val json = apiV1RequestSerialize(request)
+        val json = apiV1Serialize(request)
 
         assertContains(json, Regex("\"title\":\\s*\"Important notification\""))
         assertContains(json, Regex("\"mode\":\\s*\"stub\""))
@@ -34,8 +32,8 @@ class RequestSerializationTest {
 
     @Test
     fun deserialize() {
-        val json = apiV1RequestSerialize(request)
-        val obj = apiV1RequestDeserialize(json) as NotificationCreateRequest
+        val json = apiV1Serialize(request)
+        val obj = apiV1Deserialize<NotificationCreateRequest>(json)
 
         assertEquals(request, obj)
     }
@@ -43,9 +41,13 @@ class RequestSerializationTest {
     @Test
     fun deserializeNaked() {
         val jsonString = """
-            {"requestId": "22fc6e6f-2f46-46c2-b701-d159bda43acc"}
+            {
+                "requestType": "create",            
+                "requestId": "22fc6e6f-2f46-46c2-b701-d159bda43acc"
+            }
         """.trimIndent()
-        val obj = apiV1Mapper.readValue(jsonString, NotificationCreateRequest::class.java)
+
+        val obj = apiV1Deserialize<NotificationCreateRequest>(jsonString)
 
         assertEquals("22fc6e6f-2f46-46c2-b701-d159bda43acc", obj.requestId)
     }

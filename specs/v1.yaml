@@ -1,16 +1,15 @@
-openapi: 3.0.4
+openapi: 3.0.3
 info:
   title: "Browser Notifications ${VERSION_APP}"
   description: Browser notifications for web-app users in real time
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
+  version: 1.1.0
 servers:
   - url: http://localhost:8080/api/v1
 tags:
   - name: notification
-    description: Операции с уведомлениями
 paths:
   /notification/create:
     post:
@@ -118,22 +117,24 @@ components:
 
     IRequest:
       type: object
-      description: Базовый интерфейс для всех запросов
+      description: Base interface for all requests
       properties:
         requestType:
           type: string
-          description: Поле-дискриминатор - задаёт тип запроса
+          description: Discriminator string
           example: create
         requestId:
           type: string
-          description: Идентификатор запроса для отладки (генерируется клиентом)
+          description: Request identifier for logging/debugging purposes (generated at client side)
         debug:
           $ref: '#/components/schemas/NotificationDebug'
+      required:
+        - requestType
       discriminator:
         propertyName: requestType
         mapping:
           create: '#/components/schemas/NotificationCreateRequest'
-          read:   '#/components/schemas/NotificationReadRequest'
+          read: '#/components/schemas/NotificationReadRequest'
           update: '#/components/schemas/NotificationUpdateRequest'
           cancel: '#/components/schemas/NotificationCancelRequest'
           search: '#/components/schemas/NotificationSearchRequest'
@@ -158,27 +159,29 @@ components:
 
     IResponse:
       type: object
-      description: Базовый интерфейс для всех ответов
+      description: Base interface for all responses
       properties:
         responseType:
           type: string
-          description: Поле-дискриминатор - задаёт тип запроса
+          description: Discriminator string
           example: create
         requestId:
           type: string
-          description: Идентификатор запроса для отладки
+          description: Request identifier for logging/debugging purposes
         result:
           $ref: '#/components/schemas/ResponseResult'
         errors:
           type: array
           items:
             $ref: '#/components/schemas/Error'
+      required:
+        - responseType
 
       discriminator:
         propertyName: responseType
         mapping:
           create: '#/components/schemas/NotificationCreateResponse'
-          read:   '#/components/schemas/NotificationReadResponse'
+          read: '#/components/schemas/NotificationReadResponse'
           update: '#/components/schemas/NotificationUpdateResponse'
           cancel: '#/components/schemas/NotificationCancelResponse'
           search: '#/components/schemas/NotificationSearchResponse'
@@ -186,24 +189,22 @@ components:
 
     UserId:
       type: string
-      description: Идентификатор пользователя
     NotificationId:
       type: string
-      description: Идентификатор уведомления
     NotificationLock:
       type: string
-      description: Версия оптимистичной блокировки
+      description: Optimistic lock version
 
     BaseNotification:
       type: object
-      description: Объект описывает свойства, одинаковые для create и update
+      description: Object contains common properties for create and update type notifications
       properties:
         title:
           type: string
-          description: Заголовок уведомления
+          description: Notification Title
         description:
           type: string
-          description: Описание уведомления
+          description: Notification Description
         notificationType:
           $ref: '#/components/schemas/NotificationType'
         visibility:
@@ -211,7 +212,7 @@ components:
 
     NotificationType:
       type: string
-      description: 'Тип уведомления: обычное; предупреждение; алерт'
+      description: 'Notification Type'
       enum:
         - common
         - warning
@@ -219,7 +220,7 @@ components:
 
     NotificationVisibility:
       type: string
-      description: 'Тип видимости уведомления: видно только создателю, видно всем'
+      description: 'Notification visibility'
       enum:
         - private
         - public
@@ -292,11 +293,11 @@ components:
 
     NotificationSearchFilter:
       type: object
-      description: Набор фильтров для поиска
+      description: Search filter
       properties:
         searchString:
           type: string
-          description: Поисковая строка, которая будет искаться в уведомлениях
+          description: Search string
 
     NotificationSearchRequest:
       allOf:
@@ -310,7 +311,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/BaseNotification'
         - type: object
-          description: Объект, который возвращается в ответе бэкенда
+          description: Object to output from backend
           properties:
             id:
               $ref: '#/components/schemas/NotificationId'
@@ -326,7 +327,7 @@ components:
 
     NotificationPermissions:
       type: string
-      description: Доступы для клиента для операций над уведомлением
+      description: Client permissions to access operations on notifications
       enum:
         - read
         - update
@@ -336,7 +337,7 @@ components:
     NotificationResponseSingle:
       allOf:
         - type: object
-          description: Ответ с одним объектом уведомления
+          description: Response with single notification object
           properties:
             notification:
               $ref: '#/components/schemas/NotificationResponseObject'
@@ -344,7 +345,7 @@ components:
     NotificationResponseMulti:
       allOf:
         - type: object
-          description: Список найденных объектов
+          description: List of found notifications
           properties:
             notifications:
               type: array
@@ -400,7 +401,7 @@ components:
 
     NotificationRequestDebugStubs:
       type: string
-      description: Перечисления всех стабов
+      description: Stubs for mocking and debugging
       enum:
         - success
         - notFound
