@@ -4,7 +4,6 @@ plugins {
 
 kotlin {
     jvm {}
-    linuxX64 {}
 
     @Suppress("UNUSED_VARIABLE")
     sourceSets {

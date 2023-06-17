@@ -1,13 +1,13 @@
 package ru.otus.kotlin.brown.app.ktor.routing
 
-import io.ktor.serialization.jackson.*
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
 import io.ktor.server.websocket.*
+import io.ktor.serialization.jackson.*
+import ru.otus.kotlin.brown.api.v1.mappers.*
 import io.ktor.server.plugins.contentnegotiation.*
+import ru.otus.kotlin.brown.app.ktor.contollers.*
 import ru.otus.kotlin.brown.biz.NotificationProcessor
-import ru.otus.kotlin.brown.api.v1.mappers.apiV1Mapper
-import ru.otus.kotlin.brown.app.ktor.contollers.wsHandlerV1
 
 fun Application.configureRouting() {
     val processor = NotificationProcessor()
@@ -16,8 +16,8 @@ fun Application.configureRouting() {
         route("v1") {
             install(ContentNegotiation) {
                 jackson {
-                    setConfig(apiV1Mapper.serializationConfig)
-                    setConfig(apiV1Mapper.deserializationConfig)
+                    setConfig(apiV1mapper.serializationConfig)
+                    setConfig(apiV1mapper.deserializationConfig)
                 }
             }
 
@@ -25,7 +25,7 @@ fun Application.configureRouting() {
         }
 
         webSocket("/ws/v1") {
-            wsHandlerV1(processor)
+            NotificationWsControllerV1().handle(this, processor)
         }
     }
 }
