@@ -22,12 +22,14 @@ dependencies {
 //    }
 //}
 
+val openapiGroup = "${group}.api.v1"
+
+val apiModelOutputDir = "$rootDir/brown-api/src/main/kotlin/${openapiGroup.replace('.', '/')}/models"
+
 /**
- * Settings for models generation
+ * Settings for model generation
  */
 openApiGenerate {
-
-    val openapiGroup = "${group}.api.v1"
     /**
      * Language specific mode in which models are to be generated (here - client mode for kotlin)
      */
@@ -53,7 +55,12 @@ openApiGenerate {
      * Comment this setting out for the first run and put it back if some files was modified by hand and should not be overwritten.
      * There are modelFilesConstrainedTo and apiFilesConstrainedTo parameters for the same purpose, but they don't work for unknown reason.
      */
-    ignoreFileOverride.set("$rootDir/brown-api/src/main/kotlin/ru/otus/kotlin/brown/api/v1/models/.ignored")
+    ignoreFileOverride.set("$apiModelOutputDir/.ignored")
+    /**
+     * Some models have to be processed after generation. The setting below (along with corresponding env variable)
+     * was intended for that but it seems it doesn't work. So, I created postprocessing gradle task instead (at the end of this file).
+     */
+    enablePostProcessFile.set(true)
 
     /**
      * We need models only
@@ -86,7 +93,61 @@ openApiGenerate {
  */
 
 tasks {
+    register<ApiModelPostProcessor>("apiModelPostProcessor") {
+        apiModelDir.set(file(apiModelOutputDir))
+        discriminatorNameList.set(listOf("requestType", "responseType"))
+        excludedClassNameList.set(listOf("IRequest", "IResponse"))
+    }
     compileKotlin {
+        dependsOn(openApiGenerate, apiModelPostProcessor)
+    }
+    /**
+     * Processing of files should begin right after they are generated
+     */
+    apiModelPostProcessor {
         dependsOn(openApiGenerate)
+    }
+}
+
+/**
+ * Task for postprocessing of generated api models (see README.md in $outputDir)
+ */
+val TaskContainer.apiModelPostProcessor
+    get() = named<ApiModelPostProcessor>("apiModelPostProcessor")
+
+abstract class ApiModelPostProcessor : DefaultTask() {
+    /**
+     * Directory where generated models reside
+     */
+    @get:OutputDirectory
+    abstract val apiModelDir: DirectoryProperty
+
+    /**
+     * List of discriminator names to process in generated models
+     */
+    @get:Input
+    abstract val discriminatorNameList: ListProperty<String>
+
+    /**
+     * List of excluded classes with discriminator to prevent processing.
+     * Typically, these are interfaces with discriminators to be kept as is.
+     */
+    @get:Input
+    abstract val excludedClassNameList: ListProperty<String>
+
+    @TaskAction
+    fun execute() {
+        apiModelDir.asFileTree.forEach { it.removeDuplicatedProperty() }
+    }
+
+    private fun File.removeDuplicatedProperty() {
+        if (isDirectory || excludedClassNameList.get().contains(nameWithoutExtension)) return
+        discriminatorNameList.get().forEach {
+            val fileContent = readText().replace(
+                """("$it")""",
+                """("$it", access = JsonProperty.Access.WRITE_ONLY)"""
+            )
+            writeText(fileContent)
+        }
     }
 }

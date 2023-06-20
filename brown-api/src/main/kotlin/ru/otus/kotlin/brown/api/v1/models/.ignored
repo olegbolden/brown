@@ -4,21 +4,8 @@ NotificationUpdateRequestAllOf.kt
 NotificationSearchRequestAllOf.kt
 NotificationCancelRequestAllOf.kt
 
-NotificationResponseSingleAllOf.kt
-NotificationResponseMultiAllOf.kt
 NotificationReadObjectAllOf.kt
 NotificationUpdateObjectAllOf.kt
+NotificationResponseSingleAllOf.kt
+NotificationResponseMultiAllOf.kt
 NotificationResponseObjectAllOf.kt
-
-NotificationCreateRequest.kt
-NotificationReadRequest.kt
-NotificationUpdateRequest.kt
-NotificationSearchRequest.kt
-NotificationCancelRequest.kt
-
-NotificationInitResponse.kt
-NotificationCreateResponse.kt
-NotificationReadResponse.kt
-NotificationUpdateResponse.kt
-NotificationSearchResponse.kt
-NotificationCancelResponse.kt
