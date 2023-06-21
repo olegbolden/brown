@@ -62,7 +62,7 @@ class NotificationWsControllerV1 {
                 }
             } catch (_: ClosedReceiveChannelException) {
                 mutex.withLock {
-                    sessions.clear()
+                    sessions.removeIf { it == session }
                 }
             } catch (t: Throwable) {
                 context.addError(t.asNotificationError())
