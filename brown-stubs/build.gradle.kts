@@ -4,7 +4,6 @@ plugins {
 
 kotlin {
     jvm {}
-    linuxX64 {}
 
     sourceSets {
         val commonMain by getting {

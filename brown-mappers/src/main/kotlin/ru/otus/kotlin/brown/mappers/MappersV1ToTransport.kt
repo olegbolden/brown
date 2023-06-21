@@ -17,11 +17,11 @@ fun NotificationContext.toTransport(): IResponse {
     val notifications = this.notificationFilterResponse.toTransportNotification().takeIf { isMultipleOutput }
 
     return when (command) {
-        NotificationCommand.CREATE -> NotificationCreateResponse(null, requestId, result,  errors, notification)
-        NotificationCommand.READ -> NotificationReadResponse(null, requestId, result,  errors, notification)
-        NotificationCommand.UPDATE -> NotificationUpdateResponse(null, requestId, result,  errors, notification)
-        NotificationCommand.CANCEL -> NotificationCancelResponse(null, requestId, result,  errors, notification)
-        NotificationCommand.SEARCH -> NotificationSearchResponse(null, requestId, result,  errors, notifications)
+        NotificationCommand.CREATE -> NotificationCreateResponse(command.getResponseType(), requestId, result,  errors, notification)
+        NotificationCommand.READ -> NotificationReadResponse(command.getResponseType(), requestId, result,  errors, notification)
+        NotificationCommand.UPDATE -> NotificationUpdateResponse(command.getResponseType(), requestId, result,  errors, notification)
+        NotificationCommand.CANCEL -> NotificationCancelResponse(command.getResponseType(), requestId, result,  errors, notification)
+        NotificationCommand.SEARCH -> NotificationSearchResponse(command.getResponseType(), requestId, result,  errors, notifications)
         else -> throw UnknownRequest()
     }
 }
@@ -32,6 +32,7 @@ private fun List<Notification>.toTransportNotification(): List<NotificationRespo
     .takeIf { it.isNotEmpty() }
 
 fun NotificationContext.toTransportInit() = NotificationInitResponse(
+    responseType = "init",
     requestId = this.requestId.asString().takeIf { it.isNotBlank() },
     result = if (errors.isEmpty()) ResponseResult.SUCCESS else ResponseResult.ERROR,
     errors = errors.toTransportErrors(),

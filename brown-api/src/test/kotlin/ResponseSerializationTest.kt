@@ -2,9 +2,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertContains
 import ru.otus.kotlin.brown.api.v1.models.*
-import ru.otus.kotlin.brown.api.v1.mappers.apiV1Mapper
-import ru.otus.kotlin.brown.api.v1.mappers.apiV1ResponseDeserialize
-import ru.otus.kotlin.brown.api.v1.mappers.apiV1ResponseSerialize
+import ru.otus.kotlin.brown.api.v1.mappers.*
 
 class ResponseSerializationTest {
     private val response = NotificationCreateResponse(
@@ -20,7 +18,7 @@ class ResponseSerializationTest {
 
     @Test
     fun serialize() {
-        val json = apiV1ResponseSerialize(response)
+        val json = apiV1Serialize(response)
 
         assertContains(json, Regex("\"title\":\\s*\"Important notification\""))
         assertContains(json, Regex("\"responseType\":\\s*\"create\""))
@@ -28,8 +26,8 @@ class ResponseSerializationTest {
 
     @Test
     fun deserialize() {
-        val json = apiV1ResponseSerialize(response)
-        val obj = apiV1ResponseDeserialize(json) as NotificationCreateResponse
+        val json = apiV1Serialize(response)
+        val obj = apiV1Deserialize<NotificationCreateResponse>(json)
         assertEquals(response, obj)
     }
 }
