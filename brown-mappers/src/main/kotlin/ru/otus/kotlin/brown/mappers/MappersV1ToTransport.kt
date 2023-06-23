@@ -13,8 +13,8 @@ fun NotificationContext.toTransport(): IResponse {
     val requestId = this.requestId.asString().takeIf { it.isNotBlank() }
     val result = if (this.state == NotificationState.FINISHING) ResponseResult.SUCCESS else ResponseResult.ERROR
     val errors = this.errors.toTransportErrors()
-    val notification = this.notificationResponse.toTransportNotification().takeIf { !isMultipleOutput }
-    val notifications = this.notificationFilterResponse.toTransportNotification().takeIf { isMultipleOutput }
+    val notification = this.responseNotification.toTransportNotification().takeIf { !isMultipleOutput }
+    val notifications = this.responseNotificationList.toTransportNotification().takeIf { isMultipleOutput }
 
     return when (command) {
         NotificationCommand.CREATE -> NotificationCreateResponse(command.getResponseType(), requestId, result,  errors, notification)

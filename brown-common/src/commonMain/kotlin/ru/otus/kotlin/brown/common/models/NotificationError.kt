@@ -6,4 +6,9 @@ data class NotificationError(
     val field: String = "",
     val message: String = "",
     val exception: Throwable? = null,
-)
+    val level: Level = Level.ERROR,
+) {
+    enum class Level {
+        INFO, WARN, ERROR, DEBUG, TRACE
+    }
+}

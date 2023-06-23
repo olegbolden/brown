@@ -4,24 +4,27 @@ import io.ktor.server.routing.*
 import io.ktor.server.application.*
 import ru.otus.kotlin.brown.api.v1.models.*
 import ru.otus.kotlin.brown.app.ktor.contollers.*
-import ru.otus.kotlin.brown.biz.NotificationProcessor
+import ru.otus.kotlin.brown.app.ktor.settings.AppSettings
 
-fun Route.v1Notification(processor: NotificationProcessor) {
+fun Route.v1Notification(appSettings: AppSettings) {
+
+    val logger = appSettings.corSettings.loggerProvider.logger(Route::v1Notification::class)
+
     route("notification") {
         post("create") {
-            call.processRequest<NotificationCreateRequest>(processor)
+            call.processV1<NotificationCreateRequest, NotificationCreateResponse>(appSettings, logger)
         }
         post("read") {
-            call.processRequest<NotificationReadRequest>(processor)
+            call.processV1<NotificationReadRequest, NotificationReadResponse>(appSettings, logger)
         }
         post("update") {
-            call.processRequest<NotificationUpdateRequest>(processor)
+            call.processV1<NotificationUpdateRequest, NotificationUpdateResponse>(appSettings, logger)
         }
         post("cancel") {
-            call.processRequest<NotificationCancelRequest>(processor)
+            call.processV1<NotificationCancelRequest, NotificationCancelResponse>(appSettings, logger)
         }
         post("search") {
-            call.processRequest<NotificationSearchRequest>(processor)
+            call.processV1<NotificationSearchRequest, NotificationSearchResponse>(appSettings, logger)
         }
     }
 }

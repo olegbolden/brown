@@ -7,10 +7,9 @@ import io.ktor.serialization.jackson.*
 import ru.otus.kotlin.brown.api.v1.mappers.*
 import io.ktor.server.plugins.contentnegotiation.*
 import ru.otus.kotlin.brown.app.ktor.contollers.*
-import ru.otus.kotlin.brown.biz.NotificationProcessor
+import ru.otus.kotlin.brown.app.ktor.settings.AppSettings
 
-fun Application.configureRouting() {
-    val processor = NotificationProcessor()
+fun Application.configureRouting(appSettings: AppSettings) {
 
     routing {
         route("v1") {
@@ -21,11 +20,11 @@ fun Application.configureRouting() {
                 }
             }
 
-            v1Notification(processor)
+            v1Notification(appSettings)
         }
 
         webSocket("/ws/v1") {
-            NotificationWsControllerV1().handle(this, processor)
+            NotificationWsControllerV1().handle(this, appSettings)
         }
     }
 }

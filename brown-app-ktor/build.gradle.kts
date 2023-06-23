@@ -25,7 +25,7 @@ repositories {
 }
 
 application {
-    mainClass.set("io.ktor.server.cio.EngineMain")
+    mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
 ktor {
@@ -37,14 +37,13 @@ ktor {
 }
 
 jib {
-    container.mainClass = "io.ktor.server.cio.EngineMain"
+    container.mainClass = "io.ktor.server.netty.EngineMain"
 }
 
 kotlin {
     jvm {
         withJava()
     }
-    linuxX64 {}
 
     targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
         binaries {
@@ -55,6 +54,13 @@ kotlin {
     }
 
     sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(kotlin("stdlib-common"))
+                implementation(ktor("core")) // "io.ktor:ktor-server-core:$ktorVersion"
+            }
+        }
+
         val jvmMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
@@ -87,6 +93,7 @@ kotlin {
                 implementation(project(":brown-biz"))
                 implementation(project(":brown-common"))
                 implementation(project(":brown-stubs"))
+                implementation(project(":brown-log-logback"))
             }
         }
 

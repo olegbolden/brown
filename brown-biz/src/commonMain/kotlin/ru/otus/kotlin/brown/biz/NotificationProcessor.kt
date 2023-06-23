@@ -1,28 +1,51 @@
 package ru.otus.kotlin.brown.biz
 
-import ru.otus.kotlin.brown.stubs.NotificationStub
+import kotlinx.datetime.Clock
+import ru.otus.kotlin.brown.api.v1.models.IResponse
+import ru.otus.kotlin.brown.log.mappers.toLog
+import ru.otus.kotlin.brown.log.common.ILogWrapper
+import ru.otus.kotlin.brown.common.helpers.fail
 import ru.otus.kotlin.brown.common.NotificationContext
-import ru.otus.kotlin.brown.common.models.NotificationType
-import ru.otus.kotlin.brown.common.models.NotificationCommand
-import ru.otus.kotlin.brown.common.models.NotificationState
-import ru.otus.kotlin.brown.common.models.NotificationWorkMode
+import ru.otus.kotlin.brown.common.helpers.asNotificationError
+import ru.otus.kotlin.brown.biz.ProcessingWorkflow.Companion.stubBusinessChain
 
-class NotificationProcessor {
-    suspend fun exec(ctx: NotificationContext) {
-        // TODO: Rewrite temporary stub solution with BIZ
-        require(ctx.workMode == NotificationWorkMode.STUB) {
-            "Currently working only in STUB mode."
-        }
+class NotificationProcessor : ProcessingWorkflow {
+    suspend fun exec(ctx: NotificationContext) = stubBusinessChain.exec(ctx)
 
-        // Set state for successful stubs
-        ctx.state = NotificationState.FINISHING
+    suspend inline fun <reified T: IResponse> process(
+        logger: ILogWrapper,
+        crossinline fromTransport: suspend (NotificationContext) -> Unit,
+        crossinline sendResponse: suspend (NotificationContext) -> Unit
+    ) {
 
-        when (ctx.command) {
-            NotificationCommand.SEARCH -> {
-                ctx.notificationFilterResponse.addAll(NotificationStub.prepareSearchList(ctx.notificationFilterRequest.searchString, NotificationType.ALERT))
+        val ctx = NotificationContext(timeStart = Clock.System.now())
+
+        try {
+            fromTransport(ctx)
+            val logId = ctx.command.getRequestType()
+
+            logger.doWithLogging(id = logId) {
+                logger.info(
+                    msg = "${ctx.command} request is got",
+                    data = ctx.toLog("${logId}-got")
+                )
+                exec(ctx)
+                logger.info(
+                    msg = "${ctx.command} request is handled",
+                    data = ctx.toLog("${logId}-handled")
+                )
+                sendResponse(ctx)
             }
-            else -> {
-                ctx.notificationResponse = NotificationStub.get()
+        } catch (e: Throwable) {
+
+            val logId = T::class.java.simpleName
+
+            logger.doWithLogging(id = "${logId}-failure") {
+                logger.error(msg = "${ctx.command} handling failed")
+
+                ctx.fail(e.asNotificationError())
+                exec(ctx)
+                sendResponse(ctx)
             }
         }
     }

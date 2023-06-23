@@ -32,9 +32,9 @@ class MapperTest {
 
         assertEquals(NotificationStubType.SUCCESS, context.stubCase)
         assertEquals(NotificationWorkMode.STUB, context.workMode)
-        assertEquals("title", context.notificationRequest.title)
-        assertEquals(Visibility.PUBLIC, context.notificationRequest.visibility)
-        assertEquals(Type.ALERT, context.notificationRequest.notificationType)
+        assertEquals("title", context.requestNotification.title)
+        assertEquals(Visibility.PUBLIC, context.requestNotification.visibility)
+        assertEquals(Type.ALERT, context.requestNotification.notificationType)
     }
 
     @Test
@@ -42,7 +42,7 @@ class MapperTest {
         val context = NotificationContext(
             requestId = NotificationRequestId("1234"),
             command = NotificationCommand.CREATE,
-            notificationResponse = Notification(
+            responseNotification = Notification(
                 title = "title",
                 description = "desc",
                 notificationType = Type.ALERT,

@@ -31,14 +31,14 @@ fun NotificationContext.fromTransport(request: IRequest) {
         NotificationRequestDebugStubs.BAD_SEARCH_STRING -> NotificationStubType.BAD_SEARCH_STRING
         null -> NotificationStubType.NONE
     }
-    notificationRequest = when (request) {
+    requestNotification = when (request) {
         is NotificationCreateRequest -> request.notification?.toInternal() ?: Notification()
         is NotificationUpdateRequest -> request.notification?.toInternal() ?: Notification()
         is NotificationReadRequest -> Notification(id = request.notification?.id.toNotificationId())
         is NotificationCancelRequest -> Notification(id = request.notification?.id.toNotificationId())
         else -> Notification();
     }
-    notificationFilterRequest = when (request) {
+    requestNotificationFilter = when (request) {
         is NotificationSearchRequest -> NotificationFilter(searchString = request.notificationFilter?.searchString ?: "")
         else -> NotificationFilter()
     }

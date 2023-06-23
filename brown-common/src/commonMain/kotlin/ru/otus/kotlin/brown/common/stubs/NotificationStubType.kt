@@ -10,4 +10,5 @@ enum class NotificationStubType {
     BAD_VISIBILITY,
     CANNOT_CANCEL,
     BAD_SEARCH_STRING,
+    DB_ERROR,
 }

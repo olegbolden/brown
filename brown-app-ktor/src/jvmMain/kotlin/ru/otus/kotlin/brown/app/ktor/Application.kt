@@ -16,13 +16,17 @@ import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import org.slf4j.event.Level
 import ru.otus.kotlin.brown.app.ktor.routing.configureRouting
+import ru.otus.kotlin.brown.app.ktor.settings.AppSettings
+import ru.otus.kotlin.brown.app.ktor.settings.initAppSettings
 import java.time.Duration
 
 // function with config (application.conf)
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
+private val clazz = Application::moduleJvm::class.qualifiedName ?: "Application"
+
 @Suppress("unused") // Referenced in application.conf
-fun Application.moduleJvm() {
+fun Application.moduleJvm(appSettings: AppSettings = initAppSettings()) {
     install(WebSockets) {
         pingPeriod = Duration.ofSeconds(15)
         timeout = Duration.ofSeconds(15)
@@ -52,5 +56,5 @@ fun Application.moduleJvm() {
     @Suppress("OPT_IN_USAGE")
     install(Locations)
 
-    configureRouting()
+    configureRouting(appSettings)
 }
