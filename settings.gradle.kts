@@ -13,10 +13,16 @@ pluginManagement {
     }
 }
 
-//include("m1l1")
 include("brown-api")
-include("brown-mappers")
 include("brown-common")
-include("brown-app-ktor")
+include("brown-mappers")
+
+include("brown-log-api")
+include("brown-log-logback")
+include("brown-log-common")
+include("brown-log-mappers")
+
+include("brown-cor")
 include("brown-biz")
 include("brown-stubs")
+include("brown-app-ktor")

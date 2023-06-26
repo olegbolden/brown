@@ -5,7 +5,11 @@ data class Notification(
     var title: String = "",
     var description: String = "",
     var ownerId: NotificationUserId = NotificationUserId.NONE,
-    val notificationType: NotificationType = NotificationType.COMMON,
+    var notificationType: NotificationType = NotificationType.COMMON,
     var visibility: NotificationVisibility = NotificationVisibility.PRIVATE,
     val permissionsClient: MutableSet<NotificationPermissionClient> = mutableSetOf()
-)
+) {
+    fun deepCopy(): Notification = copy(
+        permissionsClient = permissionsClient.toMutableSet(),
+    )
+}

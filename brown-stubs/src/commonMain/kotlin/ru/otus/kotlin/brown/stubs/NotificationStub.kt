@@ -7,7 +7,7 @@ import ru.otus.kotlin.brown.stubs.ThunderNotificationStub.NOTIFICATION_WARNING
 object NotificationStub {
     fun get(): Notification = NOTIFICATION_ALERT.copy()
 
-    fun prepareResult(block: Notification.() -> Unit) = get().apply(block)
+    fun prepareResult(block: Notification.() -> Unit): Notification = get().apply(block)
 
     fun prepareSearchList(filterString: String, type: NotificationType) = listOf(
         notificationAlert("alert-888-01", filterString, type),

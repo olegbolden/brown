@@ -17,10 +17,16 @@ data class NotificationContext(
     var timeStart: Instant = Instant.NONE,
 
     // Operations with notifications
-    var notificationRequest: Notification = Notification(),
-    var notificationResponse: Notification = Notification(),
+    var requestNotification: Notification = Notification(),
+    var responseNotification: Notification = Notification(),
 
     // Search for notifications
-    var notificationFilterRequest: NotificationFilter = NotificationFilter(),
-    var notificationFilterResponse: MutableList<Notification> = mutableListOf(),
+    var requestNotificationFilter: NotificationFilter = NotificationFilter(),
+    var responseNotificationList: MutableList<Notification> = mutableListOf(),
+
+    var requestNotificationValidating: Notification = Notification(),
+    var requestNotificationFilterValidating: NotificationFilter = NotificationFilter(),
+
+    var requestNotificationValidated: Notification = Notification(),
+    var requestNotificationFilterValidated: NotificationFilter = NotificationFilter(),
 )
