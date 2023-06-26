@@ -108,7 +108,6 @@ interface ILogWrapper {
                 )
                 println(args.joinToString("\n"))
             }
-
         }
     }
 }

@@ -94,6 +94,7 @@ kotlin {
                 implementation(project(":brown-common"))
                 implementation(project(":brown-stubs"))
                 implementation(project(":brown-log-logback"))
+                implementation(project(":brown-log-mappers"))
             }
         }
 

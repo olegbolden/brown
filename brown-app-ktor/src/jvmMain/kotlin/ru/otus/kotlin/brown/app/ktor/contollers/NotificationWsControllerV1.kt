@@ -16,7 +16,9 @@ import ru.otus.kotlin.brown.common.helpers.isUpdatable
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import ru.otus.kotlin.brown.api.v1.models.IResponse
 import ru.otus.kotlin.brown.app.ktor.settings.AppSettings
+import ru.otus.kotlin.brown.biz.process
 import ru.otus.kotlin.brown.biz.NotificationProcessor
+import ru.otus.kotlin.brown.log.mappers.toLog
 
 class NotificationWsControllerV1 {
     private val mutex = Mutex()
@@ -39,7 +41,7 @@ class NotificationWsControllerV1 {
             val frame = it as? Frame.Text ?: return@mapNotNull
 
             val jsonStr = frame.readText()
-            NotificationProcessor().process<IResponse>(logger,
+            NotificationProcessor().process<IResponse>(logger, logId = "",
                 { ctx ->
                     val request = apiV1Deserialize<IRequest>(jsonStr)
                     ctx.fromTransport(request)
@@ -64,7 +66,11 @@ class NotificationWsControllerV1 {
                             sessions.removeIf { it == session }
                         }
                     }
-                })
+                },
+                { logId ->
+                    toLog(logId)
+                }
+            )
         }.collect()
     }
 }

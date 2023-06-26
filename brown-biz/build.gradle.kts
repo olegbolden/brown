@@ -20,7 +20,6 @@ kotlin {
                 implementation(project(":brown-stubs"))
                 implementation(project(":brown-cor"))
                 implementation(project(":brown-log-common"))
-                implementation(project(":brown-log-mappers"))
             }
         }
 
