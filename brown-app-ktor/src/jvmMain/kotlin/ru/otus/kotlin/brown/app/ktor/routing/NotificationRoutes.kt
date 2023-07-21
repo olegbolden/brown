@@ -3,10 +3,10 @@ package ru.otus.kotlin.brown.app.ktor.routing
 import io.ktor.server.routing.*
 import io.ktor.server.application.*
 import ru.otus.kotlin.brown.api.v1.models.*
-import ru.otus.kotlin.brown.app.ktor.contollers.*
+import ru.otus.kotlin.brown.app.ktor.contollers.processV1
 import ru.otus.kotlin.brown.app.ktor.settings.AppSettings
 
-fun Route.v1Notification(appSettings: AppSettings) {
+fun RoutingBuilder.v1Notification(appSettings: AppSettings) {
 
     val logger = appSettings.corSettings.loggerProvider.logger(Route::v1Notification::class)
 

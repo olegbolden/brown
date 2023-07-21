@@ -30,7 +30,7 @@ class MapperTest {
         val context = NotificationContext()
         context.fromTransport(req)
 
-        assertEquals(NotificationStubType.SUCCESS, context.stubCase)
+        assertEquals(NotificationStubType.SUCCESS, context.stubType)
         assertEquals(NotificationWorkMode.STUB, context.workMode)
         assertEquals("title", context.requestNotification.title)
         assertEquals(Visibility.PUBLIC, context.requestNotification.visibility)

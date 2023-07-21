@@ -20,7 +20,7 @@ fun NotificationContext.fromTransport(request: IRequest) {
         NotificationRequestDebugMode.STUB -> NotificationWorkMode.STUB
         null -> NotificationWorkMode.PROD
     }
-    stubCase = when (request.debug?.stub) {
+    stubType = when (request.debug?.stub) {
         NotificationRequestDebugStubs.SUCCESS -> NotificationStubType.SUCCESS
         NotificationRequestDebugStubs.NOT_FOUND -> NotificationStubType.NOT_FOUND
         NotificationRequestDebugStubs.BAD_ID -> NotificationStubType.BAD_ID

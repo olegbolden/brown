@@ -7,9 +7,16 @@ data class Notification(
     var ownerId: NotificationUserId = NotificationUserId.NONE,
     var notificationType: NotificationType = NotificationType.COMMON,
     var visibility: NotificationVisibility = NotificationVisibility.PRIVATE,
-    val permissionsClient: MutableSet<NotificationPermissionClient> = mutableSetOf()
+    val permissionsClient: MutableSet<NotificationPermissionClient> = mutableSetOf(),
+    var lock: NotificationLock = NotificationLock.NONE,
 ) {
     fun deepCopy(): Notification = copy(
         permissionsClient = permissionsClient.toMutableSet(),
     )
+
+    fun isEmpty() = this == NONE
+
+    companion object {
+        val NONE = Notification()
+    }
 }

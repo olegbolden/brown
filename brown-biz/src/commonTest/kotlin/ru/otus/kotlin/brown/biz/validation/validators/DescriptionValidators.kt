@@ -1,22 +1,25 @@
-package ru.otus.kotlin.brown.biz.validation
+package ru.otus.kotlin.brown.biz.validation.validators
 
 import kotlin.test.assertEquals
 import kotlin.test.assertContains
 import kotlin.test.assertNotEquals
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import ru.otus.kotlin.brown.common.models.*
+import ru.otus.kotlin.brown.stubs.NotificationStub
 import ru.otus.kotlin.brown.biz.NotificationProcessor
 import ru.otus.kotlin.brown.common.NotificationContext
-import ru.otus.kotlin.brown.common.models.*
+
+private val stub = NotificationStub.get()
 
 @OptIn(ExperimentalCoroutinesApi::class)
-fun validationIdCorrect(command: NotificationCommand, processor: NotificationProcessor) = runTest {
+fun validationDescriptionCorrect(command: NotificationCommand, processor: NotificationProcessor) = runTest {
     val ctx = NotificationContext(
         command = command,
         state = NotificationState.NONE,
         workMode = NotificationWorkMode.TEST,
         requestNotification = Notification(
-            id = NotificationId("123-234-abc-ABC"),
+            id = stub.id,
             title = "abc",
             description = "abc",
             notificationType = NotificationType.COMMON,
@@ -26,18 +29,19 @@ fun validationIdCorrect(command: NotificationCommand, processor: NotificationPro
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(NotificationState.FAILING, ctx.state)
+    assertEquals("abc", ctx.requestNotificationValidated.description)
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
-fun validationIdTrim(command: NotificationCommand, processor: NotificationProcessor) = runTest {
+fun validationDescriptionTrim(command: NotificationCommand, processor: NotificationProcessor) = runTest {
     val ctx = NotificationContext(
         command = command,
         state = NotificationState.NONE,
         workMode = NotificationWorkMode.TEST,
         requestNotification = Notification(
-            id = NotificationId(" \n\t 123-234-abc-ABC \n\t "),
+            id = stub.id,
             title = "abc",
-            description = "abc",
+            description = " \n\tabc \n\t",
             notificationType = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
         ),
@@ -45,18 +49,19 @@ fun validationIdTrim(command: NotificationCommand, processor: NotificationProces
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
     assertNotEquals(NotificationState.FAILING, ctx.state)
+    assertEquals("abc", ctx.requestNotificationValidated.description)
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
-fun validationIdEmpty(command: NotificationCommand, processor: NotificationProcessor) = runTest {
+fun validationDescriptionEmpty(command: NotificationCommand, processor: NotificationProcessor) = runTest {
     val ctx = NotificationContext(
         command = command,
         state = NotificationState.NONE,
         workMode = NotificationWorkMode.TEST,
         requestNotification = Notification(
-            id = NotificationId(""),
+            id = stub.id,
             title = "abc",
-            description = "abc",
+            description = "",
             notificationType = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
         ),
@@ -65,20 +70,20 @@ fun validationIdEmpty(command: NotificationCommand, processor: NotificationProce
     assertEquals(1, ctx.errors.size)
     assertEquals(NotificationState.FAILING, ctx.state)
     val error = ctx.errors.firstOrNull()
-    assertEquals("id", error?.field)
-    assertContains(error?.message ?: "", "id")
+    assertEquals("description", error?.field)
+    assertContains(error?.message ?: "", "description")
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
-fun validationIdFormat(command: NotificationCommand, processor: NotificationProcessor) = runTest {
+fun validationDescriptionSymbols(command: NotificationCommand, processor: NotificationProcessor) = runTest {
     val ctx = NotificationContext(
         command = command,
         state = NotificationState.NONE,
         workMode = NotificationWorkMode.TEST,
         requestNotification = Notification(
-            id = NotificationId("!@#\$%^&*(),.{}"),
+            id = stub.id,
             title = "abc",
-            description = "abc",
+            description = "!@#$%^&*(),.{}",
             notificationType = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
         ),
@@ -87,6 +92,6 @@ fun validationIdFormat(command: NotificationCommand, processor: NotificationProc
     assertEquals(1, ctx.errors.size)
     assertEquals(NotificationState.FAILING, ctx.state)
     val error = ctx.errors.firstOrNull()
-    assertEquals("id", error?.field)
-    assertContains(error?.message ?: "", "id")
+    assertEquals("description", error?.field)
+    assertContains(error?.message ?: "", "description")
 }

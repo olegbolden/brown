@@ -16,15 +16,17 @@ kotlin {
                 implementation(kotlin("stdlib-common"))
 
                 implementation(project(":brown-api"))
-                implementation(project(":brown-common"))
-                implementation(project(":brown-stubs"))
                 implementation(project(":brown-cor"))
-                implementation(project(":brown-log-common"))
+                implementation(project(":brown-stubs"))
+                implementation(project(":brown-common"))
+                implementation(project(":brown-repo-stubs"))
+                implementation(project(":brown-repo-inmemory"))
             }
         }
 
         val commonTest by getting {
             dependencies {
+                implementation(kotlin("test-junit"))
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
 
@@ -32,16 +34,5 @@ kotlin {
             }
         }
 
-        val jvmMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib-jdk8"))
-            }
-        }
-
-        val jvmTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-            }
-        }
     }
 }

@@ -1,8 +1,8 @@
 package ru.otus.kotlin.brown.common.helpers
 
+import ru.otus.kotlin.brown.common.models.*
 import ru.otus.kotlin.brown.common.NotificationContext
-import ru.otus.kotlin.brown.common.models.NotificationError
-import ru.otus.kotlin.brown.common.models.NotificationState
+import ru.otus.kotlin.brown.common.exceptions.RepoConcurrencyException
 
 fun Throwable.asNotificationError(
     code: String = "unknown",
@@ -38,4 +38,29 @@ fun errorValidation(
     group = "validation",
     message = "Validation error for field $field: $description",
     level = level,
+)
+
+fun errorAdministration(
+    field: String = "",
+    violationCode: String,
+    description: String,
+    level: NotificationError.Level = NotificationError.Level.ERROR,
+) = NotificationError(
+    field = field,
+    code = "administration-$violationCode",
+    group = "administration",
+    message = "Microservice management error: $description",
+    level = level,
+)
+
+fun errorRepoConcurrency(
+    expectedLock: NotificationLock,
+    actualLock: NotificationLock?,
+    exception: Exception? = null,
+) = NotificationError(
+    field = "lock",
+    code = "concurrency",
+    group = "repo",
+    message = "The object has been changed concurrently by another user or process",
+    exception = exception ?: RepoConcurrencyException(expectedLock, actualLock),
 )

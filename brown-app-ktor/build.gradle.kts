@@ -78,8 +78,6 @@ kotlin {
                 implementation(ktor("auto-head-response"))
                 implementation(ktor("cors")) // "io.ktor:ktor-cors:$ktorVersion"
                 implementation(ktor("default-headers")) // "io.ktor:ktor-cors:$ktorVersion"
-                implementation(ktor("cors")) // "io.ktor:ktor-cors:$ktorVersion"
-                implementation(ktor("auto-head-response"))
 
                 implementation(ktor("websockets")) // "io.ktor:ktor-websockets:$ktorVersion"
                 implementation(ktor("auth")) // "io.ktor:ktor-auth:$ktorVersion"
@@ -87,14 +85,18 @@ kotlin {
 
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
-                // transport models
+                implementation(project(":brown-biz"))
+                implementation(project(":brown-stubs"))
+                implementation(project(":brown-common"))
+
                 implementation(project(":brown-api"))
                 implementation(project(":brown-mappers"))
-                implementation(project(":brown-biz"))
-                implementation(project(":brown-common"))
-                implementation(project(":brown-stubs"))
+
                 implementation(project(":brown-log-logback"))
                 implementation(project(":brown-log-mappers"))
+
+                implementation(project(":brown-repo-stubs"))
+                implementation(project(":brown-repo-inmemory"))
             }
         }
 
@@ -104,6 +106,7 @@ kotlin {
                 implementation(ktor("test-host")) // "io.ktor:ktor-server-test-host:$ktorVersion"
                 implementation(ktor("content-negotiation", prefix = "client-"))
                 implementation(ktor("websockets", prefix = "client-"))
+                implementation(project(":brown-repo-tests"))
             }
         }
     }

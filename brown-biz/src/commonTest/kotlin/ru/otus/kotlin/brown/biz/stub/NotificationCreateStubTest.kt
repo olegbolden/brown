@@ -5,6 +5,7 @@ import kotlin.test.assertEquals
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.otus.kotlin.brown.biz.NotificationProcessor
+import ru.otus.kotlin.brown.common.CorSettings
 import ru.otus.kotlin.brown.common.NotificationContext
 import ru.otus.kotlin.brown.common.models.*
 import ru.otus.kotlin.brown.common.stubs.NotificationStubType
@@ -13,7 +14,7 @@ import ru.otus.kotlin.brown.stubs.NotificationStub
 @OptIn(ExperimentalCoroutinesApi::class)
 class NotificationCreateStubTest {
 
-    private val processor = NotificationProcessor()
+    private val processor = NotificationProcessor(CorSettings())
     val id = NotificationId("666")
     val title = "title 666"
     val description = "desc 666"
@@ -27,7 +28,7 @@ class NotificationCreateStubTest {
             command = NotificationCommand.CREATE,
             state = NotificationState.NONE,
             workMode = NotificationWorkMode.STUB,
-            stubCase = NotificationStubType.SUCCESS,
+            stubType = NotificationStubType.SUCCESS,
             requestNotification = Notification(
                 id = id,
                 title = title,
@@ -50,7 +51,7 @@ class NotificationCreateStubTest {
             command = NotificationCommand.CREATE,
             state = NotificationState.NONE,
             workMode = NotificationWorkMode.STUB,
-            stubCase = NotificationStubType.BAD_TITLE,
+            stubType = NotificationStubType.BAD_TITLE,
             requestNotification = Notification(
                 id = id,
                 title = "",
@@ -70,7 +71,7 @@ class NotificationCreateStubTest {
             command = NotificationCommand.CREATE,
             state = NotificationState.NONE,
             workMode = NotificationWorkMode.STUB,
-            stubCase = NotificationStubType.BAD_DESCRIPTION,
+            stubType = NotificationStubType.BAD_DESCRIPTION,
             requestNotification = Notification(
                 id = id,
                 title = title,
@@ -91,7 +92,7 @@ class NotificationCreateStubTest {
             command = NotificationCommand.CREATE,
             state = NotificationState.NONE,
             workMode = NotificationWorkMode.STUB,
-            stubCase = NotificationStubType.DB_ERROR,
+            stubType = NotificationStubType.DB_ERROR,
             requestNotification = Notification(
                 id = id,
             ),
@@ -107,7 +108,7 @@ class NotificationCreateStubTest {
             command = NotificationCommand.CREATE,
             state = NotificationState.NONE,
             workMode = NotificationWorkMode.STUB,
-            stubCase = NotificationStubType.BAD_ID,
+            stubType = NotificationStubType.BAD_ID,
             requestNotification = Notification(
                 id = id,
                 title = title,

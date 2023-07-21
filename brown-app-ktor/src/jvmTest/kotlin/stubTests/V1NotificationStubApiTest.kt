@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 /**
  * Notification objects are excluded from request objects since they do not processed in stub mode
  */
-class V1AdStubApiTest {
+class V1NotificationStubApiTest {
     @Test
     fun create() = testApplication {
         val client = client()
@@ -29,11 +29,13 @@ class V1AdStubApiTest {
                     stub = NotificationRequestDebugStubs.SUCCESS
                 )
             )
+
+            println(requestObj)
             contentType(ContentType.Application.Json)
             setBody(requestObj)
         }
         val responseObj = response.body<NotificationCreateResponse>()
-        println(responseObj)
+
         assertEquals(200, response.status.value)
         assertEquals("888", responseObj.notification?.id)
     }

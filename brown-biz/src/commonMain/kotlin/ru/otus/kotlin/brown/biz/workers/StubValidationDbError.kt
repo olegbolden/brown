@@ -7,7 +7,7 @@ import ru.otus.kotlin.brown.common.stubs.NotificationStubType
 
 fun ICorChainDsl<NotificationContext>.stubDbError(title: String) = worker {
     this.title = title
-    on { stubCase == NotificationStubType.DB_ERROR && state == NotificationState.RUNNING }
+    on { stubType == NotificationStubType.DB_ERROR && state == NotificationState.RUNNING }
     handle {
         state = NotificationState.FAILING
         this.errors.add(

@@ -1,14 +1,15 @@
-package ru.otus.kotlin.brown.biz.validation
+package ru.otus.kotlin.brown.biz.validation.repo.inmemory
 
 import kotlin.test.Test
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.otus.kotlin.brown.biz.NotificationProcessor
+import ru.otus.kotlin.brown.biz.validation.validators.*
+import ru.otus.kotlin.brown.common.CorSettings
 import ru.otus.kotlin.brown.common.models.NotificationCommand
+import ru.otus.kotlin.brown.repo.inmemory.NotificationInMemoryRepo
 
-@OptIn(ExperimentalCoroutinesApi::class)
-class BizValidationUpdateTest {
+class NotificationUpdateValidationTest {
     private val command = NotificationCommand.UPDATE
-    private val processor by lazy { NotificationProcessor() }
+    private val processor by lazy { NotificationProcessor(CorSettings(repoTest = NotificationInMemoryRepo())) }
 
     @Test fun correctTitle() = validationTitleCorrect(command, processor)
     @Test fun trimTitle() = validationTitleTrim(command, processor)

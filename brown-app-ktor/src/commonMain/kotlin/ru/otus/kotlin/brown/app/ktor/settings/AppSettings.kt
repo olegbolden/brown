@@ -4,7 +4,7 @@ import ru.otus.kotlin.brown.common.CorSettings
 import ru.otus.kotlin.brown.biz.NotificationProcessor
 
 data class AppSettings(
-    val appUrls: List<String>,
+    val appUrls: List<String> = emptyList(),
     val corSettings: CorSettings,
-    val processor: NotificationProcessor,
+    val processor: NotificationProcessor  = NotificationProcessor(settings = corSettings)
 )

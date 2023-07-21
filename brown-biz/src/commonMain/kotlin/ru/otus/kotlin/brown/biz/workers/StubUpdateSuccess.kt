@@ -8,7 +8,7 @@ import ru.otus.kotlin.brown.common.stubs.NotificationStubType
 
 fun ICorChainDsl<NotificationContext>.stubUpdateSuccess(title: String) = worker {
     this.title = title
-    on { stubCase == NotificationStubType.SUCCESS && state == NotificationState.RUNNING }
+    on { stubType == NotificationStubType.SUCCESS && state == NotificationState.RUNNING }
     handle {
         state = NotificationState.FINISHING
         val stub = NotificationStub.prepareResult {

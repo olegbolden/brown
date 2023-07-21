@@ -1,7 +1,10 @@
 package ru.otus.kotlin.brown.biz
 
+import ru.otus.kotlin.brown.biz.general.initRepo
+import ru.otus.kotlin.brown.biz.general.prepareResult
 import ru.otus.kotlin.brown.cor.*
 import ru.otus.kotlin.brown.biz.groups.*
+import ru.otus.kotlin.brown.biz.repo.*
 import ru.otus.kotlin.brown.biz.workers.*
 import ru.otus.kotlin.brown.biz.validation.*
 import ru.otus.kotlin.brown.common.models.*
@@ -11,7 +14,7 @@ interface ProcessingWorkflow {
     companion object {
         val stubBusinessChain = rootChain<NotificationContext> {
             initStatus("Status initialization")
-
+            initRepo("Repository setup")
             operation("Create notification scenario", NotificationCommand.CREATE) {
                 stubs("Stub processing") {
                     stubCreateSuccess("Notification successfully created")
@@ -32,6 +35,12 @@ interface ProcessingWorkflow {
 
                     finishNotificationValidation("Validation successfully finished")
                 }
+                chain {
+                    title = "Saving logic"
+                    repoPrepareCreate("Prepare saving notification to DB")
+                    repoCreate("Saving notification to DB")
+                }
+                prepareResult("Building response")
             }
             operation("Read notification scenario", NotificationCommand.READ) {
                 stubs("Stub processing") {
@@ -48,6 +57,16 @@ interface ProcessingWorkflow {
 
                     finishNotificationValidation("Validation successfully finished")
                 }
+                chain {
+                    title = "Reading logic"
+                    repoRead("Read notification from DB")
+                    worker {
+                        title = "Prepare response for Read request"
+                        on { state == NotificationState.RUNNING }
+                        handle { notificationRepoDone = notificationRepoRead }
+                    }
+                }
+                prepareResult("Prepare response")
             }
             operation("Update notification scenario", NotificationCommand.UPDATE) {
                 stubs("Stub processing") {
@@ -72,6 +91,13 @@ interface ProcessingWorkflow {
 
                     finishNotificationValidation("Validation successfully finished")
                 }
+                chain {
+                    title = "Saving logic"
+                    repoRead("Reading notification from DB")
+                    repoPrepareUpdate("Prepare notification for update")
+                    repoUpdate("Update procedure")
+                }
+                prepareResult("Prepare response")
             }
             operation("Cancel notification scenario", NotificationCommand.CANCEL) {
                 stubs("Stub processing") {
@@ -89,6 +115,13 @@ interface ProcessingWorkflow {
                     validateIdProperFormat("Check of id format validity")
                     finishNotificationValidation("Validation successfully finished")
                 }
+                chain {
+                    title = "Cancellation logic"
+                    repoRead("Retrieving notification from DB")
+                    repoPrepareCancel("Prepare notification for cancellation")
+                    repoCancel("Cancellation of notification")
+                }
+                prepareResult("Prepare response")
             }
             operation("Search notification scenario", NotificationCommand.SEARCH) {
                 stubs("Stub processing") {
@@ -100,8 +133,10 @@ interface ProcessingWorkflow {
                 validation {
                     worker("Copying fields to requestNotificationFilterValidating") { requestNotificationFilterValidating = requestNotificationFilter.copy() }
 
-                    finishAdFilterValidation("Validation successfully finished")
+                    finishNotificationFilterValidation("Validation successfully finished")
                 }
+                repoSearch("Search notifications in DB by filter")
+                prepareResult("Prepare response")
             }
         }.build()
     }

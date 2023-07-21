@@ -26,3 +26,7 @@ include("brown-cor")
 include("brown-biz")
 include("brown-stubs")
 include("brown-app-ktor")
+
+include("brown-repo-tests")
+include("brown-repo-stubs")
+include("brown-repo-inmemory")
