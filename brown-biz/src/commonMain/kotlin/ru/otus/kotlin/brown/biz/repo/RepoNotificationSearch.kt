@@ -7,7 +7,7 @@ import ru.otus.kotlin.brown.common.repo.DbNotificationFilterRequest
 
 fun ICorChainDsl<NotificationContext>.repoSearch(title: String) = worker {
     this.title = title
-    description = "Поиск объявлений в БД по фильтру"
+    description = "Search notifications from DB by filter"
     on { state == NotificationState.RUNNING }
     handle {
         val request = DbNotificationFilterRequest(

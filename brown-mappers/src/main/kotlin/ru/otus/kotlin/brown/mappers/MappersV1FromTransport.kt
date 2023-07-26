@@ -34,9 +34,9 @@ fun NotificationContext.fromTransport(request: IRequest) {
     requestNotification = when (request) {
         is NotificationCreateRequest -> request.notification?.toInternal() ?: Notification()
         is NotificationUpdateRequest -> request.notification?.toInternal() ?: Notification()
-        is NotificationReadRequest -> Notification(id = request.notification?.id.toNotificationId())
-        is NotificationCancelRequest -> Notification(id = request.notification?.id.toNotificationId())
-        else -> Notification();
+        is NotificationReadRequest -> request.notification.toInternal()
+        is NotificationCancelRequest -> request.notification.toInternal()
+        else -> Notification()
     }
     requestNotificationFilter = when (request) {
         is NotificationSearchRequest -> NotificationFilter(searchString = request.notificationFilter?.searchString ?: "")
@@ -55,6 +55,7 @@ fun String?.getNotificationCommand() = when (this) {
 }
 
 private fun String?.toNotificationId() = this?.let { NotificationId(it) } ?: NotificationId.NONE
+private fun String?.toNotificationLock() = this?.let { NotificationLock(it) } ?: NotificationLock.NONE
 
 private fun NotificationCreateObject.toInternal(): Notification = Notification(
     title = this.title ?: "",
@@ -63,12 +64,28 @@ private fun NotificationCreateObject.toInternal(): Notification = Notification(
     visibility = this.visibility.fromTransport(),
 )
 
+private fun NotificationReadObject?.toInternal(): Notification = if (this != null) {
+    Notification(id = id.toNotificationId())
+} else {
+    Notification.NONE
+}
+
+private fun NotificationCancelObject?.toInternal(): Notification = if (this != null) {
+    Notification(
+        id = id.toNotificationId(),
+        lock = lock.toNotificationLock(),
+    )
+} else {
+    Notification.NONE
+}
+
 private fun NotificationUpdateObject.toInternal(): Notification = Notification(
     id = this.id.toNotificationId(),
     title = this.title ?: "",
     description = this.description ?: "",
     notificationType = this.notificationType.fromTransport(),
     visibility = this.visibility.fromTransport(),
+    lock = lock.toNotificationLock(),
 )
 
 private fun NotificationVisibility?.fromTransport(): Visibility = when (this) {

@@ -24,6 +24,7 @@ fun validationTitleCorrect(command: NotificationCommand, processor: Notification
             description = "abc",
             notificationType = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
+            lock = NotificationLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)
@@ -44,6 +45,7 @@ fun validationTitleTrim(command: NotificationCommand, processor: NotificationPro
             description = "abc",
             notificationType = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
+            lock = NotificationLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)
@@ -64,6 +66,7 @@ fun validationTitleEmpty(command: NotificationCommand, processor: NotificationPr
             description = "abc",
             notificationType = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
+            lock = NotificationLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)
@@ -86,6 +89,7 @@ fun validationTitleSymbols(command: NotificationCommand, processor: Notification
             description = "abc",
             notificationType = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
+            lock = NotificationLock("123-234-abc-ABC"),
         ),
     )
     processor.exec(ctx)

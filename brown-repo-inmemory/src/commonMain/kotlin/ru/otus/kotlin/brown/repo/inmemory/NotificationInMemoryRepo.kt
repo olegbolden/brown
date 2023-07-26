@@ -120,7 +120,9 @@ class NotificationInMemoryRepo(
                 } ?: true
             }
             .filter { entry ->
-                (rq.notificationType?.name == entry.value.notificationType)
+                rq.notificationType.takeIf { it != null }?.let {
+                    rq.notificationType?.name == entry.value.notificationType
+                } ?: true
             }
             .filter { entry ->
                 rq.titleFilter.takeIf { it.isNotBlank() }?.let {

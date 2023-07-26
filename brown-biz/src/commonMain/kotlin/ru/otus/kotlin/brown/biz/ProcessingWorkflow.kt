@@ -79,11 +79,14 @@ interface ProcessingWorkflow {
                 }
                 validation {
                     worker("Copying fields to requestNotificationValidating") { requestNotificationValidating = requestNotification.deepCopy() }
-                    worker("Cleaning of id") { requestNotificationValidating.id = NotificationId(requestNotificationValidating.id.asString().trim()) }
+                    worker("Id clean up") { requestNotificationValidating.id = NotificationId(requestNotificationValidating.id.asString().trim()) }
+                    worker("Lock clean up") { requestNotificationValidating.lock = NotificationLock(requestNotificationValidating.lock.asString().trim()) }
                     worker("Cleaning of title") { requestNotificationValidating.title = requestNotificationValidating.title.trim() }
                     worker("Cleaning of description") { requestNotificationValidating.description = requestNotificationValidating.description.trim() }
                     validateIdNotEmpty("Check if the Id is not empty")
-                    validateIdProperFormat("Check of id format validity")
+                    validateIdProperFormat("Check of Id format validity")
+                    validateLockNotEmpty("Check if the lock is not empty")
+                    validateLockProperFormat("Check of lock format validity")
                     validateTitleNotEmpty("Check if the title is not empty")
                     validateTitleHasContent("Check content validity")
                     validateDescriptionNotEmpty("Check if the description is not empty")
@@ -110,9 +113,12 @@ interface ProcessingWorkflow {
                     worker("Copying fields to requestNotificationValidating") {
                         requestNotificationValidating = requestNotification.deepCopy()
                     }
-                    worker("Cleaning of id") { requestNotificationValidating.id = NotificationId(requestNotificationValidating.id.asString().trim()) }
+                    worker("Id clean up") { requestNotificationValidating.id = NotificationId(requestNotificationValidating.id.asString().trim()) }
+                    worker("Lock clean up") { requestNotificationValidating.lock = NotificationLock(requestNotificationValidating.lock.asString().trim()) }
                     validateIdNotEmpty("Check if the Id is not empty")
                     validateIdProperFormat("Check of id format validity")
+                    validateLockNotEmpty("Check if the lock is not empty")
+                    validateLockProperFormat("Check of lock format validity")
                     finishNotificationValidation("Validation successfully finished")
                 }
                 chain {

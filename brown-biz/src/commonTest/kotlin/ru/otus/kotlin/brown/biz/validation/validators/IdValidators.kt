@@ -15,13 +15,9 @@ fun validationIdCorrect(command: NotificationCommand, processor: NotificationPro
         command = command,
         state = NotificationState.NONE,
         workMode = NotificationWorkMode.TEST,
-        requestNotification = Notification(
-            id = NotificationId("123-234-abc-ABC"),
-            title = "abc",
-            description = "abc",
-            notificationType = NotificationType.COMMON,
-            visibility = NotificationVisibility.PUBLIC,
-        ),
+        requestNotification = ru.otus.kotlin.brown.stubs.NotificationStub.prepareResult {
+            lock = NotificationLock("123-234-abc-ABC")
+        }
     )
     processor.exec(ctx)
     assertEquals(0, ctx.errors.size)
@@ -40,6 +36,7 @@ fun validationIdTrim(command: NotificationCommand, processor: NotificationProces
             description = "abc",
             notificationType = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
+            lock = NotificationLock("123-234-abc-ABC")
         ),
     )
     processor.exec(ctx)
@@ -59,6 +56,7 @@ fun validationIdEmpty(command: NotificationCommand, processor: NotificationProce
             description = "abc",
             notificationType = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
+            lock = NotificationLock("123-234-abc-ABC")
         ),
     )
     processor.exec(ctx)
@@ -81,6 +79,7 @@ fun validationIdFormat(command: NotificationCommand, processor: NotificationProc
             description = "abc",
             notificationType = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
+            lock = NotificationLock("123-234-abc-ABC")
         ),
     )
     processor.exec(ctx)

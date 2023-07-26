@@ -44,6 +44,7 @@ fun errorAdministration(
     field: String = "",
     violationCode: String,
     description: String,
+    exception: Exception? = null,
     level: NotificationError.Level = NotificationError.Level.ERROR,
 ) = NotificationError(
     field = field,
@@ -51,6 +52,7 @@ fun errorAdministration(
     group = "administration",
     message = "Microservice management error: $description",
     level = level,
+    exception = exception,
 )
 
 fun errorRepoConcurrency(

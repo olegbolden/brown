@@ -29,6 +29,8 @@ kotlin {
                 implementation(kotlin("test-junit"))
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
+                implementation(project(":brown-repo-tests"))
+                implementation(project(":brown-repo-stubs"))
 
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
             }

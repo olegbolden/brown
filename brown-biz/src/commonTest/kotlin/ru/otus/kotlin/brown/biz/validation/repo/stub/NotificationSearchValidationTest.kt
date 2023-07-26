@@ -14,7 +14,7 @@ import ru.otus.kotlin.brown.repo.stubs.NotificationStubRepo
 @OptIn(ExperimentalCoroutinesApi::class)
 class NotificationSearchValidationTest {
     private val command = NotificationCommand.SEARCH
-    private val processor by lazy { NotificationProcessor(CorSettings(repoTest = NotificationStubRepo())) }
+    private val processor = NotificationProcessor(CorSettings(repoTest = NotificationStubRepo()))
 
     @Test
     fun correctEmpty() = runTest {

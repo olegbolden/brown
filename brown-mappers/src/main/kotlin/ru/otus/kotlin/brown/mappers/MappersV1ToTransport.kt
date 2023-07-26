@@ -17,11 +17,11 @@ fun NotificationContext.toTransport(): IResponse {
     val notifications = this.responseNotificationList.toTransportNotification().takeIf { isMultipleOutput }
 
     return when (command) {
-        NotificationCommand.CREATE -> NotificationCreateResponse(command.getResponseType(), requestId, result,  errors, notification)
-        NotificationCommand.READ -> NotificationReadResponse(command.getResponseType(), requestId, result,  errors, notification)
-        NotificationCommand.UPDATE -> NotificationUpdateResponse(command.getResponseType(), requestId, result,  errors, notification)
-        NotificationCommand.CANCEL -> NotificationCancelResponse(command.getResponseType(), requestId, result,  errors, notification)
-        NotificationCommand.SEARCH -> NotificationSearchResponse(command.getResponseType(), requestId, result,  errors, notifications)
+        NotificationCommand.CREATE -> NotificationCreateResponse(command.getResponseType(), requestId, result, errors, notification)
+        NotificationCommand.READ -> NotificationReadResponse(command.getResponseType(), requestId, result, errors, notification)
+        NotificationCommand.UPDATE -> NotificationUpdateResponse(command.getResponseType(), requestId, result, errors, notification)
+        NotificationCommand.CANCEL -> NotificationCancelResponse(command.getResponseType(), requestId, result, errors, notification)
+        NotificationCommand.SEARCH -> NotificationSearchResponse(command.getResponseType(), requestId, result, errors, notifications)
         else -> throw UnknownRequest()
     }
 }
@@ -46,6 +46,7 @@ private fun Notification.toTransportNotification(): NotificationResponseObject =
     notificationType = notificationType.toTransportNotification(),
     visibility = visibility.toTransportNotification(),
     permissions = permissionsClient.toTransportNotification(),
+    lock = lock.takeIf { it != NotificationLock.NONE }?.asString(),
 )
 
 private fun Set<NotificationPermissionClient>.toTransportNotification(): Set<NotificationPermissions>? = this

@@ -12,7 +12,7 @@ import ru.otus.kotlin.brown.common.models.NotificationCommand
 
 class NotificationReadValidationTest {
     private val command = NotificationCommand.READ
-    private val processor by lazy { NotificationProcessor(CorSettings(repoTest = NotificationStubRepo())) }
+    private val processor = NotificationProcessor(CorSettings(repoTest = NotificationStubRepo()))
 
     @Test fun correctId() = validationIdCorrect(command, processor)
     @Test fun trimId() = validationIdTrim(command, processor)
