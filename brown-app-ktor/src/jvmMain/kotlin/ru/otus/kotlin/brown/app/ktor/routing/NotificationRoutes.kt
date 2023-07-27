@@ -6,7 +6,7 @@ import ru.otus.kotlin.brown.api.v1.models.*
 import ru.otus.kotlin.brown.app.ktor.contollers.processV1
 import ru.otus.kotlin.brown.app.ktor.settings.AppSettings
 
-fun RoutingBuilder.v1Notification(appSettings: AppSettings) {
+fun Route.v1Notification(appSettings: AppSettings) {
 
     val logger = appSettings.corSettings.loggerProvider.logger(Route::v1Notification::class)
 

@@ -31,14 +31,15 @@ class V1NotificationMockApiTest {
 
     @Test
     fun create() = testApplication {
-        val repo = NotificationRepositoryMock(
+        initRepoTest(NotificationRepositoryMock(
             invokeCreateNotification = {
                 DbNotificationResponse(
                     isSuccess = true,
                     data = it.notification.copy(id = notificationId),
                 )
             }
-        )
+        ))
+
         val client = myClient()
 
         val createNotification = NotificationCreateObject(
@@ -51,8 +52,8 @@ class V1NotificationMockApiTest {
         val response = client.post("/v1/notification/create") {
             val requestObj = NotificationCreateRequest(
                 requestId = "12345",
-                notification = createNotification,
                 requestType = "create",
+                notification = createNotification,
                 debug = NotificationDebug(
                     mode = NotificationRequestDebugMode.TEST,
                 )
@@ -71,7 +72,7 @@ class V1NotificationMockApiTest {
 
     @Test
     fun read() = testApplication {
-        val repo = NotificationRepositoryMock(
+        initRepoTest(NotificationRepositoryMock(
             invokeReadNotification = {
                 DbNotificationResponse(
                     isSuccess = true,
@@ -81,14 +82,15 @@ class V1NotificationMockApiTest {
                     ),
                 )
             }
-        )
+        ))
+
         val client = myClient()
 
         val response = client.post("/v1/notification/read") {
             val requestObj = NotificationReadRequest(
                 requestId = "12345",
-                notification = NotificationReadObject(notificationId.asString()),
                 requestType = "read",
+                notification = NotificationReadObject(notificationId.asString()),
                 debug = NotificationDebug(
                     mode = NotificationRequestDebugMode.TEST,
                 )
@@ -103,7 +105,7 @@ class V1NotificationMockApiTest {
 
     @Test
     fun update() = testApplication {
-        val repo = NotificationRepositoryMock(
+        initRepoTest(NotificationRepositoryMock(
             invokeReadNotification = {
                 DbNotificationResponse(
                     isSuccess = true,
@@ -120,7 +122,8 @@ class V1NotificationMockApiTest {
                     data = it.notification.copy(ownerId = userId),
                 )
             }
-        )
+        ))
+
         val client = myClient()
 
         val notificationUpdate = NotificationUpdateObject(
@@ -162,39 +165,37 @@ class V1NotificationMockApiTest {
 
     @Test
     fun cancel() = testApplication {
-        application {
-            val repo = NotificationRepositoryMock(
-                invokeReadNotification = {
-                    DbNotificationResponse(
-                        isSuccess = true,
-                        data = Notification(
-                            id = it.id,
-                            ownerId = userId,
-                        ),
-                    )
-                },
-                invokeCancelNotification = {
-                    DbNotificationResponse(
-                        isSuccess = true,
-                        data = Notification(
-                            id = it.id,
-                            ownerId = userId,
-                        ),
-                    )
-                }
-            )
-        }
+        initRepoTest(NotificationRepositoryMock(
+            invokeReadNotification = {
+                DbNotificationResponse(
+                    isSuccess = true,
+                    data = Notification(
+                        id = it.id,
+                        ownerId = userId,
+                    ),
+                )
+            },
+            invokeCancelNotification = {
+                DbNotificationResponse(
+                    isSuccess = true,
+                    data = Notification(
+                        id = it.id,
+                        ownerId = userId,
+                    ),
+                )
+            }
+        ))
 
         val client = myClient()
 
-        val cancelId = "888"
+        val deleteId = "666"
 
         val response = client.post("/v1/notification/cancel") {
             val requestObj = NotificationCancelRequest(
                 requestId = "12345",
                 requestType = "cancel",
                 notification = NotificationCancelObject(
-                    id = cancelId,
+                    id = deleteId,
                     lock = "123",
                 ),
                 debug = NotificationDebug(
@@ -206,35 +207,32 @@ class V1NotificationMockApiTest {
         }
         val responseObj = response.body<NotificationCancelResponse>()
         assertEquals(200, response.status.value)
-        assertEquals(cancelId, responseObj.notification?.id)
+        assertEquals(deleteId, responseObj.notification?.id)
     }
 
     @Test
     fun search() = testApplication {
-        initRepoTest(
-            NotificationRepositoryMock(
-                invokeSearchNotification = {
-                    DbNotificationsResponse(
-                        isSuccess = true,
-                        data = listOf(
-                            Notification(
-                                title = it.titleFilter,
-                                ownerId = it.ownerId,
-                                // TODO Get rid of !! operator
-                                notificationType = it.notificationType!!,
-                            )
-                        ),
-                    )
-                }
-            )
-        )
+        initRepoTest(NotificationRepositoryMock(
+            invokeSearchNotification = {
+                DbNotificationsResponse(
+                    isSuccess = true,
+                    data = listOf(
+                        Notification(
+                            title = it.titleFilter,
+                            ownerId = it.ownerId,
+                            notificationType = it.notificationType!!,
+                        )
+                    ),
+                )
+            }
+        ))
         val client = myClient()
 
         val response = client.post("/v1/notification/search") {
             val requestObj = NotificationSearchRequest(
                 requestId = "12345",
-                notificationFilter = NotificationSearchFilter(),
                 requestType = "search",
+                notificationFilter = NotificationSearchFilter(),
                 debug = NotificationDebug(
                     mode = NotificationRequestDebugMode.TEST,
                 )

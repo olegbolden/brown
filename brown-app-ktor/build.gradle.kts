@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.util.suffixIfNot
 val ktorVersion: String by project
 val logbackVersion: String by project
 val serializationVersion: String by project
+val flywayDbVersion: String by project
 
 // ex: Converts to "io.ktor:ktor-ktor-server-netty:2.0.1" with only ktor("netty")
 fun ktor(
@@ -18,6 +19,7 @@ plugins {
     kotlin("plugin.serialization")
     kotlin("multiplatform")
     id("io.ktor.plugin")
+    id("org.flywaydb.flyway")
 }
 
 repositories {
@@ -83,6 +85,9 @@ kotlin {
                 implementation(ktor("auth")) // "io.ktor:ktor-auth:$ktorVersion"
                 implementation(ktor("auth-jwt")) // "io.ktor:ktor-auth-jwt:$ktorVersion"
 
+                implementation("com.zaxxer:HikariCP:5.0.1")
+                implementation("org.flywaydb:flyway-core:$flywayDbVersion")
+
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
                 implementation(project(":brown-biz"))
@@ -97,6 +102,7 @@ kotlin {
 
                 implementation(project(":brown-repo-stubs"))
                 implementation(project(":brown-repo-inmemory"))
+                implementation(project(":brown-repo-postgresql"))
             }
         }
 

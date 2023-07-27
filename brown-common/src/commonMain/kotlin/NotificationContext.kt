@@ -16,7 +16,6 @@ data class NotificationContext(
     var stubType: NotificationStubType = NotificationStubType.NONE,
     var workMode: NotificationWorkMode = NotificationWorkMode.PROD,
 
-
     // Request params
     var requestId: NotificationRequestId = NotificationRequestId.NONE,
     var requestNotification: Notification = Notification(),
@@ -26,7 +25,7 @@ data class NotificationContext(
     var responseNotification: Notification = Notification(),
     var responseNotificationList: MutableList<Notification> = mutableListOf(),
 
-    // Validation staff
+    // Validation
     var requestNotificationValidating: Notification = Notification(),
     var requestNotificationFilterValidating: NotificationFilter = NotificationFilter(),
     var requestNotificationValidated: Notification = Notification(),
