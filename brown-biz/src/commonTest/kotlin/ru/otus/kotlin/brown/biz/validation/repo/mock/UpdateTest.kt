@@ -7,7 +7,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import ru.otus.kotlin.brown.common.models.*
 import ru.otus.kotlin.brown.common.CorSettings
 import ru.otus.kotlin.brown.biz.NotificationProcessor
-import ru.otus.kotlin.brown.biz.validation.repo.mock.repoNotFoundTest
 import ru.otus.kotlin.brown.common.NotificationContext
 import ru.otus.kotlin.brown.common.repo.DbNotificationResponse
 import ru.otus.kotlin.brown.repo.tests.NotificationRepositoryMock
@@ -22,7 +21,7 @@ class UpdateTest {
         title = "abc",
         description = "abc",
         ownerId = userId,
-        notificationType = NotificationType.COMMON,
+        type = NotificationType.COMMON,
         visibility = NotificationVisibility.PUBLIC,
     )
     private val repo by lazy { NotificationRepositoryMock(
@@ -39,7 +38,7 @@ class UpdateTest {
                     id = NotificationId("123"),
                     title = "xyz",
                     description = "xyz",
-                    notificationType = NotificationType.COMMON,
+                    type = NotificationType.COMMON,
                     visibility = NotificationVisibility.PUBLIC,
                 )
             )
@@ -58,7 +57,7 @@ class UpdateTest {
             id = NotificationId("123"),
             title = "xyz",
             description = "xyz",
-            notificationType = NotificationType.COMMON,
+            type = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
             lock = NotificationLock("123-234-abc-ABC"),
         )
@@ -73,7 +72,7 @@ class UpdateTest {
         assertEquals(notificationToUpdate.id, ctx.responseNotification.id)
         assertEquals(notificationToUpdate.title, ctx.responseNotification.title)
         assertEquals(notificationToUpdate.description, ctx.responseNotification.description)
-        assertEquals(notificationToUpdate.notificationType, ctx.responseNotification.notificationType)
+        assertEquals(notificationToUpdate.type, ctx.responseNotification.type)
         assertEquals(notificationToUpdate.visibility, ctx.responseNotification.visibility)
     }
 

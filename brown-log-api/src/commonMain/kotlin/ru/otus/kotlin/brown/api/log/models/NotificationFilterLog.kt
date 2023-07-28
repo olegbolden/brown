@@ -25,7 +25,7 @@ import kotlinx.serialization.encoding.*
  *
  * @param searchString 
  * @param ownerId 
- * @param notificationType 
+ * @param type 
  */
 @Serializable
 
@@ -35,7 +35,7 @@ data class NotificationFilterLog (
 
     @SerialName(value = "ownerId") val ownerId: kotlin.String? = null,
 
-    @SerialName(value = "notificationType") val notificationType: kotlin.String? = null
+    @SerialName(value = "type") val type: kotlin.String? = null
 
 )
 

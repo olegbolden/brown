@@ -14,7 +14,7 @@ private val initNotification = Notification(
     id = NotificationId("123"),
     title = "abc",
     description = "abc",
-    notificationType = NotificationType.COMMON,
+    type = NotificationType.COMMON,
     visibility = NotificationVisibility.PUBLIC,
 )
 private val repo = NotificationRepositoryMock(
@@ -48,7 +48,7 @@ fun repoNotFoundTest(command: NotificationCommand) = runTest {
             id = NotificationId("12345"),
             title = "xyz",
             description = "xyz",
-            notificationType = NotificationType.COMMON,
+            type = NotificationType.COMMON,
             visibility = NotificationVisibility.PRIVATE,
             lock = NotificationLock("123-234-abc-ABC"),
 

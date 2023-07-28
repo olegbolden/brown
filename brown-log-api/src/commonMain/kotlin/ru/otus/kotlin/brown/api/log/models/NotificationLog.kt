@@ -26,7 +26,7 @@ import kotlinx.serialization.encoding.*
  * @param id 
  * @param title 
  * @param description 
- * @param notificationType 
+ * @param type 
  * @param visibility 
  * @param ownerId 
  * @param permissions 
@@ -41,7 +41,7 @@ data class NotificationLog (
 
     @SerialName(value = "description") val description: kotlin.String? = null,
 
-    @SerialName(value = "notificationType") val notificationType: kotlin.String? = null,
+    @SerialName(value = "type") val type: kotlin.String? = null,
 
     @SerialName(value = "visibility") val visibility: kotlin.String? = null,
 

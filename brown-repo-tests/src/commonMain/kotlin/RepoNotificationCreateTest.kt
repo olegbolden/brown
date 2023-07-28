@@ -17,7 +17,7 @@ abstract class RepoNotificationCreateTest {
         description = "create object description",
         ownerId = NotificationUserId("owner-123"),
         visibility = NotificationVisibility.PUBLIC,
-        notificationType = NotificationType.ALERT,
+        type = NotificationType.ALERT,
     )
 
     @Test
@@ -27,7 +27,7 @@ abstract class RepoNotificationCreateTest {
         assertEquals(true, result.isSuccess)
         assertEquals(expected.title, result.data?.title)
         assertEquals(expected.description, result.data?.description)
-        assertEquals(expected.notificationType, result.data?.notificationType)
+        assertEquals(expected.type, result.data?.type)
         assertNotEquals(NotificationId.NONE, result.data?.id)
         assertEquals(emptyList(), result.errors)
         assertEquals(lockNew, result.data?.lock)

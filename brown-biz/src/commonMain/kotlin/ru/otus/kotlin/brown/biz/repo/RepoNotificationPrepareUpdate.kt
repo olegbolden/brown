@@ -1,8 +1,9 @@
 package ru.otus.kotlin.brown.biz.repo
 
-import ru.otus.kotlin.brown.cor.*
 import ru.otus.kotlin.brown.common.NotificationContext
 import ru.otus.kotlin.brown.common.models.NotificationState
+import ru.otus.kotlin.brown.cor.ICorChainDsl
+import ru.otus.kotlin.brown.cor.worker
 
 fun ICorChainDsl<NotificationContext>.repoPrepareUpdate(title: String) = worker {
     this.title = title
@@ -13,8 +14,10 @@ fun ICorChainDsl<NotificationContext>.repoPrepareUpdate(title: String) = worker 
         notificationRepoPrepare = notificationRepoRead.deepCopy().apply {
             this.title = requestNotificationValidated.title
             description = requestNotificationValidated.description
-            notificationType = requestNotificationValidated.notificationType
+            type = requestNotificationValidated.type
             visibility = requestNotificationValidated.visibility
+            status = requestNotificationValidated.status
+            lock = requestNotificationValidated.lock
         }
     }
 }

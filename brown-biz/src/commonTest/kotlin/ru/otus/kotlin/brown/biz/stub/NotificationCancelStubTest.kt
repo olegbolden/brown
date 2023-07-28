@@ -35,7 +35,7 @@ class NotificationCancelStubTest {
         assertEquals(stub.id, ctx.responseNotification.id)
         assertEquals(stub.title, ctx.responseNotification.title)
         assertEquals(stub.description, ctx.responseNotification.description)
-        assertEquals(stub.notificationType, ctx.responseNotification.notificationType)
+        assertEquals(stub.type, ctx.responseNotification.type)
         assertEquals(stub.visibility, ctx.responseNotification.visibility)
     }
 

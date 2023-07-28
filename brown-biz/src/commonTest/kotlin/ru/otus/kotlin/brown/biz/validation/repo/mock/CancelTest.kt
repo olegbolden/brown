@@ -22,7 +22,7 @@ class CancelTest {
         title = "abc",
         description = "abc",
         ownerId = userId,
-        notificationType = NotificationType.COMMON,
+        type = NotificationType.COMMON,
         visibility = NotificationVisibility.PUBLIC,
         lock = NotificationLock("123-234-abc-ABC"),
     )
@@ -69,7 +69,7 @@ class CancelTest {
         assertEquals(initNotification.id, ctx.responseNotification.id)
         assertEquals(initNotification.title, ctx.responseNotification.title)
         assertEquals(initNotification.description, ctx.responseNotification.description)
-        assertEquals(initNotification.notificationType, ctx.responseNotification.notificationType)
+        assertEquals(initNotification.type, ctx.responseNotification.type)
         assertEquals(initNotification.visibility, ctx.responseNotification.visibility)
     }
 

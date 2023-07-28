@@ -1,6 +1,8 @@
 package ru.otus.kotlin.brown.stubs
 
-import ru.otus.kotlin.brown.common.models.*
+import ru.otus.kotlin.brown.common.models.Notification
+import ru.otus.kotlin.brown.common.models.NotificationId
+import ru.otus.kotlin.brown.common.models.NotificationType
 import ru.otus.kotlin.brown.stubs.ThunderNotificationStub.NOTIFICATION_ALERT
 import ru.otus.kotlin.brown.stubs.ThunderNotificationStub.NOTIFICATION_WARNING
 
@@ -28,6 +30,6 @@ object NotificationStub {
         id = NotificationId(id),
         title = "$filterString $id",
         description = "desc $filterString $id",
-        notificationType = type,
+        type = type,
     )
 }

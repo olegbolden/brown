@@ -1,9 +1,13 @@
 package ru.otus.kotlin.brown.repo.postgresql.mappers
 
+import com.benasher44.uuid.uuid4
 import org.jetbrains.exposed.sql.ResultRow
-import ru.otus.kotlin.brown.common.models.*
 import org.jetbrains.exposed.sql.statements.InsertStatement
 import org.jetbrains.exposed.sql.statements.UpdateStatement
+import ru.otus.kotlin.brown.common.models.Notification
+import ru.otus.kotlin.brown.common.models.NotificationId
+import ru.otus.kotlin.brown.common.models.NotificationLock
+import ru.otus.kotlin.brown.common.models.NotificationUserId
 import ru.otus.kotlin.brown.repo.postgresql.entity.NotificationTable
 
 fun ResultRow.toNotification(): Notification = Notification(
@@ -12,7 +16,8 @@ fun ResultRow.toNotification(): Notification = Notification(
     description = this[NotificationTable.description],
     ownerId = NotificationUserId(this[NotificationTable.owner].toString()),
     visibility = this[NotificationTable.visibility],
-    notificationType = this[NotificationTable.type],
+    status = this[NotificationTable.status],
+    type = this[NotificationTable.type],
     lock = NotificationLock(this[NotificationTable.lock])
 )
 
@@ -21,8 +26,9 @@ fun Notification.toInsertStatement(statement: InsertStatement<Number>): InsertSt
     it[NotificationTable.description] = this.description
     it[NotificationTable.owner] = this.ownerId.asString()
     it[NotificationTable.visibility] = this.visibility
-    it[NotificationTable.type] = this.notificationType
-    it[NotificationTable.lock] = this.lock.asString()
+    it[NotificationTable.status] = this.status
+    it[NotificationTable.type] = this.type
+    it[NotificationTable.lock] = uuid4().toString()
 }
 
 fun Notification.toUpdateStatement(statement: UpdateStatement): UpdateStatement = statement.also {
@@ -30,6 +36,7 @@ fun Notification.toUpdateStatement(statement: UpdateStatement): UpdateStatement 
     it[NotificationTable.description] = this.description
     it[NotificationTable.owner] = this.ownerId.asString()
     it[NotificationTable.visibility] = this.visibility
-    it[NotificationTable.type] = this.notificationType
+    it[NotificationTable.status] = this.status
+    it[NotificationTable.type] = this.type
     it[NotificationTable.lock] = this.lock.asString()
 }

@@ -1,15 +1,15 @@
 package ru.otus.kotlin.brown.mappers
 
 import ru.otus.kotlin.brown.api.v1.models.*
-import ru.otus.kotlin.brown.common.models.*
 import ru.otus.kotlin.brown.common.NotificationContext
-import ru.otus.kotlin.brown.common.models.NotificationFilter
-import ru.otus.kotlin.brown.common.models.NotificationType as Type
-import ru.otus.kotlin.brown.common.models.NotificationVisibility as Visibility
+import ru.otus.kotlin.brown.common.models.*
 import ru.otus.kotlin.brown.common.stubs.NotificationStubType
 import ru.otus.kotlin.brown.mappers.exceptions.NullNotAllowed
 import ru.otus.kotlin.brown.mappers.exceptions.UnknownNotificationCommand
 import ru.otus.kotlin.brown.mappers.exceptions.ValueOutOfRange
+import ru.otus.kotlin.brown.common.models.NotificationStatus as Status
+import ru.otus.kotlin.brown.common.models.NotificationType as Type
+import ru.otus.kotlin.brown.common.models.NotificationVisibility as Visibility
 
 fun NotificationContext.fromTransport(request: IRequest) {
     command = request.requestType.getNotificationCommand()
@@ -60,7 +60,7 @@ private fun String?.toNotificationLock() = this?.let { NotificationLock(it) } ?:
 private fun NotificationCreateObject.toInternal(): Notification = Notification(
     title = this.title ?: "",
     description = this.description ?: "",
-    notificationType = this.notificationType.fromTransport(),
+    type = this.type.fromTransport(),
     visibility = this.visibility.fromTransport(),
 )
 
@@ -83,7 +83,8 @@ private fun NotificationUpdateObject.toInternal(): Notification = Notification(
     id = this.id.toNotificationId(),
     title = this.title ?: "",
     description = this.description ?: "",
-    notificationType = this.notificationType.fromTransport(),
+    status = this.status.fromTransport(),
+    type = this.type.fromTransport(),
     visibility = this.visibility.fromTransport(),
     lock = lock.toNotificationLock(),
 )
@@ -99,6 +100,13 @@ private fun NotificationType?.fromTransport(): Type = when (this) {
     NotificationType.COMMON -> Type.COMMON
     NotificationType.WARNING -> Type.WARNING
     NotificationType.ALERT -> Type.ALERT
+    null -> throw NullNotAllowed()
+    else -> throw ValueOutOfRange(this.javaClass)
+}
+
+private fun NotificationStatus?.fromTransport(): Status = when (this) {
+    NotificationStatus.OPEN -> Status.OPEN
+    NotificationStatus.CLOSED -> Status.CLOSED
     null -> throw NullNotAllowed()
     else -> throw ValueOutOfRange(this.javaClass)
 }

@@ -34,7 +34,7 @@ class NotificationReadStubTest {
             assertEquals(id, ctx.responseNotification.id)
             assertEquals(title, ctx.responseNotification.title)
             assertEquals(description, ctx.responseNotification.description)
-            assertEquals(notificationType, ctx.responseNotification.notificationType)
+            assertEquals(type, ctx.responseNotification.type)
             assertEquals(visibility, ctx.responseNotification.visibility)
         }
     }

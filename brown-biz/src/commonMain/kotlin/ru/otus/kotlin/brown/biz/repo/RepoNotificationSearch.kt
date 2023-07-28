@@ -13,7 +13,7 @@ fun ICorChainDsl<NotificationContext>.repoSearch(title: String) = worker {
         val request = DbNotificationFilterRequest(
             titleFilter = requestNotificationFilterValidated.searchString,
             ownerId = requestNotificationFilterValidated.ownerId,
-            notificationType = requestNotificationFilterValidated.notificationType,
+            type = requestNotificationFilterValidated.type,
         )
         val response = notificationRepo.searchNotification(request)
         val responseNotificationList = response.data

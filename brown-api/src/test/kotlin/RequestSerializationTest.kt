@@ -15,7 +15,7 @@ class RequestSerializationTest {
         notification = NotificationCreateObject(
             title = "Important notification",
             description = "Don't forget to phone to your parents",
-            notificationType = NotificationType.COMMON,
+            type = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
         )
     )

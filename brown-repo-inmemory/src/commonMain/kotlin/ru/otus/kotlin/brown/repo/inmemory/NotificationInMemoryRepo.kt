@@ -1,15 +1,15 @@
 package ru.otus.kotlin.brown.repo.inmemory
 
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 import com.benasher44.uuid.uuid4
+import io.github.reactivecircus.cache4k.Cache
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import io.github.reactivecircus.cache4k.Cache
 import ru.otus.kotlin.brown.common.helpers.errorRepoConcurrency
 import ru.otus.kotlin.brown.common.models.*
 import ru.otus.kotlin.brown.common.repo.*
 import ru.otus.kotlin.brown.repo.inmemory.entity.NotificationEntity
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 class NotificationInMemoryRepo(
     initObjects: List<Notification> = emptyList(),
@@ -120,8 +120,8 @@ class NotificationInMemoryRepo(
                 } ?: true
             }
             .filter { entry ->
-                rq.notificationType.takeIf { it != null }?.let {
-                    rq.notificationType?.name == entry.value.notificationType
+                rq.type.takeIf { it != null }?.let {
+                    rq.type?.name == entry.value.type
                 } ?: true
             }
             .filter { entry ->

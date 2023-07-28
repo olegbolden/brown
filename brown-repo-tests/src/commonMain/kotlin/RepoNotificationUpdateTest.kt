@@ -21,7 +21,7 @@ abstract class RepoNotificationUpdateTest {
             description = "update object description",
             ownerId = NotificationUserId("owner-123"),
             visibility = NotificationVisibility.PUBLIC,
-            notificationType = NotificationType.ALERT,
+            type = NotificationType.ALERT,
             lock = initObjects.first().lock,
         )
     }
@@ -31,7 +31,7 @@ abstract class RepoNotificationUpdateTest {
         description = "update object not found description",
         ownerId = NotificationUserId("owner-123"),
         visibility = NotificationVisibility.PUBLIC,
-        notificationType = NotificationType.ALERT,
+        type = NotificationType.ALERT,
         lock = initObjects.first().lock,
     )
     private val reqUpdateConc by lazy {
@@ -41,7 +41,7 @@ abstract class RepoNotificationUpdateTest {
             description = "update object not found description",
             ownerId = NotificationUserId("owner-123"),
             visibility = NotificationVisibility.PUBLIC,
-            notificationType = NotificationType.ALERT,
+            type = NotificationType.ALERT,
             lock = lockBad,
         )
     }
@@ -53,7 +53,7 @@ abstract class RepoNotificationUpdateTest {
         assertEquals(reqUpdateSucc.id, result.data?.id)
         assertEquals(reqUpdateSucc.title, result.data?.title)
         assertEquals(reqUpdateSucc.description, result.data?.description)
-        assertEquals(reqUpdateSucc.notificationType, result.data?.notificationType)
+        assertEquals(reqUpdateSucc.type, result.data?.type)
         assertEquals(emptyList(), result.errors)
         assertEquals(lockNew, result.data?.lock)
     }

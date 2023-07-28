@@ -10,7 +10,7 @@ abstract class BaseInitNotifications(val op: String): IInitObjects<Notification>
     fun createInitTestModel(
         suf: String,
         ownerId: NotificationUserId = NotificationUserId("owner-123"),
-        notificationType: NotificationType = NotificationType.COMMON,
+        type: NotificationType = NotificationType.COMMON,
         lock: NotificationLock = lockOld,
     ) = Notification(
         id = NotificationId("notification-repo-$op-$suf"),
@@ -18,7 +18,7 @@ abstract class BaseInitNotifications(val op: String): IInitObjects<Notification>
         description = "$suf stub description",
         ownerId = ownerId,
         visibility = NotificationVisibility.PRIVATE,
-        notificationType = notificationType,
+        type = type,
         lock = lock,
     )
 }

@@ -11,7 +11,7 @@ class ResponseSerializationTest {
         notification = NotificationResponseObject(
             title = "Important notification",
             description = "Don't forget to phone to your parents",
-            notificationType = NotificationType.COMMON,
+            type = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
         )
     )

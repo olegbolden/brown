@@ -34,7 +34,7 @@ fun validationIdTrim(command: NotificationCommand, processor: NotificationProces
             id = NotificationId(" \n\t 123-234-abc-ABC \n\t "),
             title = "abc",
             description = "abc",
-            notificationType = NotificationType.COMMON,
+            type = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
             lock = NotificationLock("123-234-abc-ABC")
         ),
@@ -54,7 +54,7 @@ fun validationIdEmpty(command: NotificationCommand, processor: NotificationProce
             id = NotificationId(""),
             title = "abc",
             description = "abc",
-            notificationType = NotificationType.COMMON,
+            type = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
             lock = NotificationLock("123-234-abc-ABC")
         ),
@@ -77,7 +77,7 @@ fun validationIdFormat(command: NotificationCommand, processor: NotificationProc
             id = NotificationId("!@#\$%^&*(),.{}"),
             title = "abc",
             description = "abc",
-            notificationType = NotificationType.COMMON,
+            type = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
             lock = NotificationLock("123-234-abc-ABC")
         ),

@@ -33,7 +33,7 @@ class NotificationCreateStubTest {
                 id = id,
                 title = title,
                 description = description,
-                notificationType = dealSide,
+                type = dealSide,
                 visibility = visibility,
             ),
         )
@@ -41,7 +41,7 @@ class NotificationCreateStubTest {
         assertEquals(NotificationStub.get().id, ctx.responseNotification.id)
         assertEquals(title, ctx.responseNotification.title)
         assertEquals(description, ctx.responseNotification.description)
-        assertEquals(dealSide, ctx.responseNotification.notificationType)
+        assertEquals(dealSide, ctx.responseNotification.type)
         assertEquals(visibility, ctx.responseNotification.visibility)
     }
 
@@ -56,7 +56,7 @@ class NotificationCreateStubTest {
                 id = id,
                 title = "",
                 description = description,
-                notificationType = dealSide,
+                type = dealSide,
                 visibility = visibility,
             ),
         )
@@ -76,7 +76,7 @@ class NotificationCreateStubTest {
                 id = id,
                 title = title,
                 description = "",
-                notificationType = dealSide,
+                type = dealSide,
                 visibility = visibility,
             ),
         )
@@ -113,7 +113,7 @@ class NotificationCreateStubTest {
                 id = id,
                 title = title,
                 description = description,
-                notificationType = dealSide,
+                type = dealSide,
                 visibility = visibility,
             ),
         )

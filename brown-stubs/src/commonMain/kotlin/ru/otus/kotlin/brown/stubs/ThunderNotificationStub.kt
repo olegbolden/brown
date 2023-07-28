@@ -9,7 +9,8 @@ object ThunderNotificationStub {
             title = "Намечается гроза",
             description = "В 2 часа ночи намечается гроза, просьба закрыть форточки",
             ownerId = NotificationUserId("513"),
-            notificationType = NotificationType.ALERT,
+            type = NotificationType.ALERT,
+            status = NotificationStatus.OPEN,
             visibility = NotificationVisibility.PUBLIC,
             permissionsClient = mutableSetOf(
                 NotificationPermissionClient.READ,
@@ -18,5 +19,5 @@ object ThunderNotificationStub {
             )
         )
     val NOTIFICATION_WARNING: Notification
-        get() = NOTIFICATION_ALERT.copy(notificationType = NotificationType.WARNING)
+        get() = NOTIFICATION_ALERT.copy(type = NotificationType.WARNING)
 }

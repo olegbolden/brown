@@ -35,7 +35,7 @@ class NotificationSearchStubTest {
         assertTrue(first.title.contains(filter.searchString))
         assertTrue(first.description.contains(filter.searchString))
         with (NotificationStub.get()) {
-            assertEquals(notificationType, first.notificationType)
+            assertEquals(type, first.type)
             assertEquals(visibility, first.visibility)
         }
     }

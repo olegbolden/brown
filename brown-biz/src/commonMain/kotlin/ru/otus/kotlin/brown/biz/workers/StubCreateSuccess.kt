@@ -14,7 +14,7 @@ fun ICorChainDsl<NotificationContext>.stubCreateSuccess(title: String) = worker 
         responseNotification = NotificationStub.prepareResult {
             requestNotification.title.takeIf { it.isNotBlank() }?.also { this.title = it }
             requestNotification.description.takeIf { it.isNotBlank() }?.also { this.description = it }
-            notificationType = requestNotification.notificationType
+            type = requestNotification.type
             visibility = requestNotification.visibility
         }
     }

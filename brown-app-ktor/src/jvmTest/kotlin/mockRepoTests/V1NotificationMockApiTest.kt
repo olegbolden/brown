@@ -45,7 +45,7 @@ class V1NotificationMockApiTest {
         val createNotification = NotificationCreateObject(
             title = "Ухудшение погоды",
             description = "Надвигается грозовой фронт",
-            notificationType = NotificationType.COMMON,
+            type = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
         )
 
@@ -66,7 +66,7 @@ class V1NotificationMockApiTest {
         assertEquals(notificationId.asString(), responseObj.notification?.id)
         assertEquals(createNotification.title, responseObj.notification?.title)
         assertEquals(createNotification.description, responseObj.notification?.description)
-        assertEquals(createNotification.notificationType, responseObj.notification?.notificationType)
+        assertEquals(createNotification.type, responseObj.notification?.type)
         assertEquals(createNotification.visibility, responseObj.notification?.visibility)
     }
 
@@ -130,7 +130,7 @@ class V1NotificationMockApiTest {
             id = "888",
             title = "Ухудшение погоды",
             description = "Надвигается грозовой фронт",
-            notificationType = NotificationType.COMMON,
+            type = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
             lock = "123",
         )
@@ -143,7 +143,7 @@ class V1NotificationMockApiTest {
                     id = "888",
                     title = "Ухудшение погоды",
                     description = "Надвигается грозовой фронт",
-                    notificationType = NotificationType.COMMON,
+                    type = NotificationType.COMMON,
                     visibility = NotificationVisibility.PUBLIC,
                     lock = "123",
                 ),
@@ -159,7 +159,7 @@ class V1NotificationMockApiTest {
         assertEquals(notificationUpdate.id, responseObj.notification?.id)
         assertEquals(notificationUpdate.title, responseObj.notification?.title)
         assertEquals(notificationUpdate.description, responseObj.notification?.description)
-        assertEquals(notificationUpdate.notificationType, responseObj.notification?.notificationType)
+        assertEquals(notificationUpdate.type, responseObj.notification?.type)
         assertEquals(notificationUpdate.visibility, responseObj.notification?.visibility)
     }
 
@@ -220,7 +220,7 @@ class V1NotificationMockApiTest {
                         Notification(
                             title = it.titleFilter,
                             ownerId = it.ownerId,
-                            notificationType = it.notificationType!!,
+                            type = it.type!!,
                         )
                     ),
                 )

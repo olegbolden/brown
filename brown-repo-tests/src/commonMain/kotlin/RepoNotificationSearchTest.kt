@@ -1,9 +1,9 @@
 package ru.otus.kotlin.brown.repo.tests
 
-import kotlin.test.*
-import ru.otus.kotlin.brown.common.repo.*
-import ru.otus.kotlin.brown.common.models.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import ru.otus.kotlin.brown.common.models.*
+import ru.otus.kotlin.brown.common.repo.*
+import kotlin.test.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
 abstract class RepoNotificationSearchTest {
@@ -22,7 +22,7 @@ abstract class RepoNotificationSearchTest {
 
     @Test
     fun searchRequestType() = runRepoTest {
-        val result = repo.searchNotification(DbNotificationFilterRequest(notificationType = NotificationType.ALERT))
+        val result = repo.searchNotification(DbNotificationFilterRequest(type = NotificationType.ALERT))
         assertEquals(true, result.isSuccess)
         val expected = listOf(initializedObjects[2], initializedObjects[4]).sortedBy { it.id.asString() }
         assertEquals(expected, result.data?.sortedBy { it.id.asString() })
@@ -35,9 +35,9 @@ abstract class RepoNotificationSearchTest {
         override val initObjects: List<Notification> = listOf(
             createInitTestModel("notification1"),
             createInitTestModel("notification2", ownerId = searchOwnerId),
-            createInitTestModel("notification3", notificationType = NotificationType.ALERT),
+            createInitTestModel("notification3", type = NotificationType.ALERT),
             createInitTestModel("notification4", ownerId = searchOwnerId),
-            createInitTestModel("notification5", notificationType = NotificationType.ALERT),
+            createInitTestModel("notification5", type = NotificationType.ALERT),
         )
     }
 }

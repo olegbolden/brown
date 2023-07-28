@@ -14,7 +14,7 @@ class MapperTest {
             responseNotification = Notification(
                 title = "title",
                 description = "desc",
-                notificationType = NotificationType.ALERT,
+                type = NotificationType.ALERT,
                 visibility = NotificationVisibility.PUBLIC,
             ),
             errors = mutableListOf(

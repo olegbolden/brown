@@ -27,7 +27,7 @@ fun NotificationContext.toNotificationLog():NotificationLogModel? {
 private fun NotificationFilter.toLog() = NotificationFilterLog(
     searchString = searchString.takeIf { it.isNotBlank() },
     ownerId = ownerId.takeIf { it != NotificationUserId.NONE }?.asString(),
-    notificationType = notificationType?.name,
+    type = type?.name,
 )
 
 fun NotificationError.toLog() = ErrorLogModel(
@@ -42,7 +42,7 @@ fun Notification.toLog() = NotificationLog(
     id = id.takeIf { it != NotificationId.NONE }?.asString(),
     title = title.takeIf { it.isNotBlank() },
     description = description.takeIf { it.isNotBlank() },
-    notificationType = notificationType.name,
+    type = type.name,
     visibility = visibility.name,
     ownerId = ownerId.takeIf { it != NotificationUserId.NONE }?.asString(),
     permissions = permissionsClient.takeIf { it.isNotEmpty() }?.map { it.name }?.toSet(),

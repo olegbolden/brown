@@ -23,7 +23,7 @@ class V1NotificationInmemoryApiTest {
     private val createNotification = NotificationCreateObject(
         title = "Отключение электричества",
         description = "Планируется отключение электричества с 5 по 15 августа",
-        notificationType = NotificationType.COMMON,
+        type = NotificationType.COMMON,
         visibility = NotificationVisibility.PUBLIC,
     )
 
@@ -54,7 +54,7 @@ class V1NotificationInmemoryApiTest {
         val responseObj = createObject(client())
         assertEquals(createNotification.title, responseObj.notification?.title)
         assertEquals(createNotification.description, responseObj.notification?.description)
-        assertEquals(createNotification.notificationType, responseObj.notification?.notificationType)
+        assertEquals(createNotification.type, responseObj.notification?.type)
         assertEquals(createNotification.visibility, responseObj.notification?.visibility)
     }
 
@@ -89,7 +89,7 @@ class V1NotificationInmemoryApiTest {
             id = created.notification?.id,
             title = "Болт",
             description = "КРУТЕЙШИЙ",
-            notificationType = NotificationType.COMMON,
+            type = NotificationType.COMMON,
             visibility = NotificationVisibility.PUBLIC,
             lock = created.notification?.lock,
         )
@@ -111,7 +111,7 @@ class V1NotificationInmemoryApiTest {
         assertEquals(notificationUpdate.id, responseObj.notification?.id)
         assertEquals(notificationUpdate.title, responseObj.notification?.title)
         assertEquals(notificationUpdate.description, responseObj.notification?.description)
-        assertEquals(notificationUpdate.notificationType, responseObj.notification?.notificationType)
+        assertEquals(notificationUpdate.type, responseObj.notification?.type)
         assertEquals(notificationUpdate.visibility, responseObj.notification?.visibility)
     }
 

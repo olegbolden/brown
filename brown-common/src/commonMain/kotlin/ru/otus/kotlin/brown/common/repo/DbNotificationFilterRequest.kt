@@ -1,9 +1,10 @@
 package ru.otus.kotlin.brown.common.repo
 
-import ru.otus.kotlin.brown.common.models.*
+import ru.otus.kotlin.brown.common.models.NotificationType
+import ru.otus.kotlin.brown.common.models.NotificationUserId
 
 data class DbNotificationFilterRequest(
     val titleFilter: String = "",
     val ownerId: NotificationUserId = NotificationUserId.NONE,
-    val notificationType: NotificationType? = null,
+    val type: NotificationType? = null,
 )

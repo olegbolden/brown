@@ -1,17 +1,16 @@
 package ru.otus.kotlin.brown.repo.postgresql
 
-import javax.sql.DataSource
 import org.jetbrains.exposed.sql.*
-import java.util.NoSuchElementException
-import ru.otus.kotlin.brown.common.repo.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import ru.otus.kotlin.brown.common.models.NotificationId
 import ru.otus.kotlin.brown.common.helpers.asNotificationError
+import ru.otus.kotlin.brown.common.models.NotificationId
 import ru.otus.kotlin.brown.common.models.NotificationUserId
+import ru.otus.kotlin.brown.common.repo.*
 import ru.otus.kotlin.brown.repo.postgresql.entity.NotificationTable
 import ru.otus.kotlin.brown.repo.postgresql.mappers.toInsertStatement
 import ru.otus.kotlin.brown.repo.postgresql.mappers.toNotification
 import ru.otus.kotlin.brown.repo.postgresql.mappers.toUpdateStatement
+import javax.sql.DataSource
 
 class PostgresqlRepo (pool: DataSource) : INotificationRepository {
 
@@ -83,8 +82,8 @@ class PostgresqlRepo (pool: DataSource) : INotificationRepository {
                     if (rq.ownerId != NotificationUserId.NONE) {
                         add(NotificationTable.owner eq rq.ownerId.asString())
                     }
-                    if (rq.notificationType != null) {
-                        add(NotificationTable.type eq rq.notificationType!!)
+                    if (rq.type != null) {
+                        add(NotificationTable.type eq rq.type!!)
                     }
                     if (rq.titleFilter.isNotBlank()) {
                         add(
