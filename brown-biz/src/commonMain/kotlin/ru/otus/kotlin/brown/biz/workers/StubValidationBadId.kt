@@ -7,7 +7,7 @@ import ru.otus.kotlin.brown.common.stubs.NotificationStubType
 
 fun ICorChainDsl<NotificationContext>.stubValidationBadId(title: String) = worker {
     this.title = title
-    on { stubCase == NotificationStubType.BAD_ID && state == NotificationState.RUNNING }
+    on { stubType == NotificationStubType.BAD_ID && state == NotificationState.RUNNING }
     handle {
         state = NotificationState.FAILING
         this.errors.add(

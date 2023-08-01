@@ -8,13 +8,13 @@ import ru.otus.kotlin.brown.common.stubs.NotificationStubType
 
 fun ICorChainDsl<NotificationContext>.stubCreateSuccess(title: String) = worker {
     this.title = title
-    on { stubCase == NotificationStubType.SUCCESS && state == NotificationState.RUNNING }
+    on { stubType == NotificationStubType.SUCCESS && state == NotificationState.RUNNING }
     handle {
         state = NotificationState.FINISHING
         responseNotification = NotificationStub.prepareResult {
             requestNotification.title.takeIf { it.isNotBlank() }?.also { this.title = it }
             requestNotification.description.takeIf { it.isNotBlank() }?.also { this.description = it }
-            notificationType = requestNotification.notificationType
+            type = requestNotification.type
             visibility = requestNotification.visibility
         }
     }

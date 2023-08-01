@@ -27,6 +27,7 @@ private val clazz = Application::moduleJvm::class.qualifiedName ?: "Application"
 
 @Suppress("unused") // Referenced in application.conf
 fun Application.moduleJvm(appSettings: AppSettings = initAppSettings()) {
+
     install(WebSockets) {
         pingPeriod = Duration.ofSeconds(15)
         timeout = Duration.ofSeconds(15)

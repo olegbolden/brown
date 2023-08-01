@@ -16,6 +16,7 @@
 package ru.otus.kotlin.brown.api.v1.models
 
 import ru.otus.kotlin.brown.api.v1.models.NotificationPermissions
+import ru.otus.kotlin.brown.api.v1.models.NotificationStatus
 import ru.otus.kotlin.brown.api.v1.models.NotificationType
 import ru.otus.kotlin.brown.api.v1.models.NotificationVisibility
 
@@ -26,7 +27,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
  *
  * @param title Notification Title
  * @param description Notification Description
- * @param notificationType 
+ * @param type 
+ * @param status 
  * @param visibility 
  * @param id 
  * @param ownerId 
@@ -45,8 +47,11 @@ data class NotificationResponseObject (
     @field:JsonProperty("description")
     val description: kotlin.String? = null,
 
-    @field:JsonProperty("notificationType")
-    val notificationType: NotificationType? = null,
+    @field:JsonProperty("type")
+    val type: NotificationType? = null,
+
+    @field:JsonProperty("status")
+    val status: NotificationStatus? = null,
 
     @field:JsonProperty("visibility")
     val visibility: NotificationVisibility? = null,

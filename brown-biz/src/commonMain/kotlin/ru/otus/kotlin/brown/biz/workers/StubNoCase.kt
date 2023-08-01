@@ -14,7 +14,7 @@ fun ICorChainDsl<NotificationContext>.stubNoCase(title: String) = worker {
                 code = "validation",
                 field = "stub",
                 group = "validation",
-                message = "Wrong stub case is requested: ${stubCase.name}"
+                message = "Wrong stub case is requested: ${stubType.name}"
             )
         )
     }

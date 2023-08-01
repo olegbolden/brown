@@ -13,7 +13,7 @@ fun ICorChainDsl<NotificationContext>.finishNotificationValidation(title: String
     }
 }
 
-fun ICorChainDsl<NotificationContext>.finishAdFilterValidation(title: String) = worker {
+fun ICorChainDsl<NotificationContext>.finishNotificationFilterValidation(title: String) = worker {
     this.title = title
     on { state == NotificationState.RUNNING }
     handle {

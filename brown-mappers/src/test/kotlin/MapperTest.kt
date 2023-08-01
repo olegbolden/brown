@@ -1,13 +1,14 @@
+
 import org.junit.Test
-import kotlin.test.assertEquals
 import ru.otus.kotlin.brown.api.v1.models.*
-import ru.otus.kotlin.brown.common.models.*
 import ru.otus.kotlin.brown.common.NotificationContext
+import ru.otus.kotlin.brown.common.models.*
 import ru.otus.kotlin.brown.common.stubs.NotificationStubType
-import ru.otus.kotlin.brown.common.models.NotificationType as Type
-import ru.otus.kotlin.brown.common.models.NotificationVisibility as Visibility
 import ru.otus.kotlin.brown.mappers.fromTransport
 import ru.otus.kotlin.brown.mappers.toTransport
+import kotlin.test.assertEquals
+import ru.otus.kotlin.brown.common.models.NotificationType as Type
+import ru.otus.kotlin.brown.common.models.NotificationVisibility as Visibility
 
 class MapperTest {
     @Test
@@ -22,7 +23,7 @@ class MapperTest {
             notification = NotificationCreateObject(
                 title = "title",
                 description = "desc",
-                notificationType = NotificationType.ALERT,
+                type = NotificationType.ALERT,
                 visibility = NotificationVisibility.PUBLIC,
             ),
         )
@@ -30,11 +31,11 @@ class MapperTest {
         val context = NotificationContext()
         context.fromTransport(req)
 
-        assertEquals(NotificationStubType.SUCCESS, context.stubCase)
+        assertEquals(NotificationStubType.SUCCESS, context.stubType)
         assertEquals(NotificationWorkMode.STUB, context.workMode)
         assertEquals("title", context.requestNotification.title)
         assertEquals(Visibility.PUBLIC, context.requestNotification.visibility)
-        assertEquals(Type.ALERT, context.requestNotification.notificationType)
+        assertEquals(Type.ALERT, context.requestNotification.type)
     }
 
     @Test
@@ -45,7 +46,7 @@ class MapperTest {
             responseNotification = Notification(
                 title = "title",
                 description = "desc",
-                notificationType = Type.ALERT,
+                type = Type.ALERT,
                 visibility = Visibility.PUBLIC,
             ),
             errors = mutableListOf(
@@ -65,7 +66,7 @@ class MapperTest {
         assertEquals("title", req.notification?.title)
         assertEquals("desc", req.notification?.description)
         assertEquals(NotificationVisibility.PUBLIC, req.notification?.visibility)
-        assertEquals(NotificationType.ALERT, req.notification?.notificationType)
+        assertEquals(NotificationType.ALERT, req.notification?.type)
         assertEquals(1, req.errors?.size)
         assertEquals("err", req.errors?.firstOrNull()?.code)
         assertEquals("request", req.errors?.firstOrNull()?.group)

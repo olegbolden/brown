@@ -41,7 +41,7 @@ class NotificationWsControllerV1 {
             val frame = it as? Frame.Text ?: return@mapNotNull
 
             val jsonStr = frame.readText()
-            NotificationProcessor().process<IResponse>(logger, logId = "",
+            appSettings.processor.process<IResponse>(logger, logId = "",
                 { ctx ->
                     val request = apiV1Deserialize<IRequest>(jsonStr)
                     ctx.fromTransport(request)
