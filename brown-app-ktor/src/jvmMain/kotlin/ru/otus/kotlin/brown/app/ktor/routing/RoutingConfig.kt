@@ -1,13 +1,14 @@
 package ru.otus.kotlin.brown.app.ktor.routing
 
-import io.ktor.util.*
-import io.ktor.server.routing.*
-import io.ktor.server.application.*
-import io.ktor.server.websocket.*
 import io.ktor.serialization.jackson.*
-import ru.otus.kotlin.brown.api.v1.mappers.*
+import io.ktor.server.application.*
+import io.ktor.server.http.content.*
 import io.ktor.server.plugins.contentnegotiation.*
-import ru.otus.kotlin.brown.app.ktor.contollers.*
+import io.ktor.server.routing.*
+import io.ktor.server.websocket.*
+import io.ktor.util.*
+import ru.otus.kotlin.brown.api.v1.mappers.apiV1mapper
+import ru.otus.kotlin.brown.app.ktor.contollers.NotificationWsControllerV1
 import ru.otus.kotlin.brown.app.ktor.settings.AppSettings
 import ru.otus.kotlin.brown.app.ktor.settings.initPlugins
 
@@ -28,6 +29,10 @@ fun Application.configureRouting(appSettings: AppSettings) {
 
         webSocket("/ws/v1") {
             NotificationWsControllerV1().handle(this, appSettings)
+        }
+
+        staticResources("/", "public") {
+            default("index.html")
         }
     }
 }
