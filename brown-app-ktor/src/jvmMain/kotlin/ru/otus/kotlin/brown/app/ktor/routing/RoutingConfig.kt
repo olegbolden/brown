@@ -9,11 +9,14 @@ import io.ktor.server.websocket.*
 import io.ktor.util.*
 import ru.otus.kotlin.brown.api.v1.mappers.apiV1mapper
 import ru.otus.kotlin.brown.app.ktor.contollers.NotificationWsControllerV1
+import ru.otus.kotlin.brown.app.ktor.contollers.NotificationWsEventControllerV1
 import ru.otus.kotlin.brown.app.ktor.settings.AppSettings
 import ru.otus.kotlin.brown.app.ktor.settings.initPlugins
 
 fun Application.configureRouting(appSettings: AppSettings) {
     initPlugins(appSettings)
+    val notificationsWsControllerV1 = NotificationWsControllerV1()
+    val notificationsWsEventControllerV1 = NotificationWsEventControllerV1()
 
     routing {
         route("v1") {
@@ -28,7 +31,11 @@ fun Application.configureRouting(appSettings: AppSettings) {
         }
 
         webSocket("/ws/v1") {
-            NotificationWsControllerV1().handle(this, appSettings)
+            notificationsWsControllerV1.handle(this, appSettings)
+        }
+
+        webSocket("/ws/event") {
+            notificationsWsEventControllerV1.handle(this, appSettings)
         }
 
         staticResources("/", "public") {
