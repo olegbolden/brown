@@ -17,11 +17,15 @@
 <div style="display: flex; justify-content: center; margin-top: 15px">
     <div style="width: 800px;">
         <div class="mainHeader">Browser Notifications Demo</div>
+        <div style="text-align: right; margin-bottom: -46px">
+                <span id="notificationInformer"></span>
+        </div>
         <div id="root"></div>
     </div>
 </div>
 </body>
 <script src="notification.js"></script>
+<script src="notificationInformer.js"></script>
 <script>
     NotificationModule.notificationList({
         rbac: {
@@ -32,6 +36,12 @@
         },
         containerId: 'root',
         searchEndpoint: '/v1/notification/search'
+    });
+
+    NotificationInformerModule.renderInformer({
+        containerId: 'notificationInformer',
+        searchEndpoint: '/v1/notification/search',
+        endpoint:'ws://brown:8080/ws/event'
     });
 </script>
 </html>
