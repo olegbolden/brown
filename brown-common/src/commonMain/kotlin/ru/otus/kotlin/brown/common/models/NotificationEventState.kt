@@ -22,7 +22,7 @@ object NotificationEventState {
     }
 
     /**
-     * Возвращает список событий, происшедших в течение текущего дня
+     * Возвращает список событий, происшедших за указанный период (EVENT_MONITORING_PERIOD)
      */
     fun getNotificationEventList(): List<NotificationEvent> = lockWrapper {
         notificationEventList
