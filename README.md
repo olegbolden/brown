@@ -1,6 +1,8 @@
 # <span style="color:brown">Brown</span> - application for real time <span style="color:brown">brow</span>ser <span style="color:brown">n</span>otifications 
 
-**Brown** provides means for management and delivery of notifications  about various events/incidents in real time via special informer with popups in browser window.
+This project is a result of my 6-month study at `Kotlin Backend Developer. Professional` course by [Otus](https://otus.ru).
+
+**Brown** provides means for management and delivery of notifications about various events/incidents in real time via special informer with popups in browser window.
 
 It is divided into two parts. The first one is a module for notification management. You can create, update and close notifications.
 The second one is a notification informer to be used on client's browser side to display notifications in real time.
